@@ -3,6 +3,7 @@ package ;
 import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
+import org.flixel.FlxG;
 import org.flixel.FlxGame;
 
 /**
@@ -26,6 +27,7 @@ class Main extends Sprite
 	{
 		var game:FlxGame = new FlxCameraDemo();
 		addChild(game);
+		FlxG.setDebuggerLayout(FlxG.DEBUGGER_BIG);
 	}
 	
 	static public function main() 

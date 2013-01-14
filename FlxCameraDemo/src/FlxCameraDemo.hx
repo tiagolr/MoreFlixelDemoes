@@ -23,11 +23,16 @@ class FlxCameraDemo extends FlxGame
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 		
-		var ratioX:Float = stageWidth / 800;
+		var ratioX:Float = stageWidth / 600;
 		var ratioY:Float = stageHeight / 480;
 		var ratio:Float = Math.min(ratioX, ratioY);
+		
+		#if TRUE_ZOOM_OUT
+		ratio *= 0.5;
+		#end
+		
 		#if (flash || desktop || neko)
-		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), GameState, ratio, 60, 60, true);
+		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), GameState, ratio, 60, 60, true);
 		#else
 		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), GameState, ratio, 60, 30, true);
 		#end
@@ -37,5 +42,5 @@ class FlxCameraDemo extends FlxGame
 		mouseEnabled = true;
 		_mouse.visible = true;
 	}
-	
+
 }
