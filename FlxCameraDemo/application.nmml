@@ -30,7 +30,7 @@
 
 	<!-- myflags -->
 	<!--haxedef name="TRUE_ZOOM_OUT" /-->
-	<haxedef name="dev" />
+	<!--haxedef name="dev" /-->
 	<haxedef name="NAPE_RELEASE_BUILD"/>
 	<haxedef name="HXCPP_DEBUGGER" if="cpp" />
 	

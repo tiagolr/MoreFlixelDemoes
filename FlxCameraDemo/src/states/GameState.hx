@@ -58,6 +58,7 @@ class GameState extends FlxPhysState
 		// Walls border.
 		add(new FlxSprite( -FlxG.width / 2, -FlxG.height / 2, Assets.getBitmapData("assets/Border.png")));
 		
+		// Player orb
 		orbShadow = new FlxSprite(FlxG.width / 2, FlxG.height / 2, Assets.getBitmapData("assets/OrbShadow.png"));
 		orbShadow.centerOffsets();
 		orbShadow.blend = BlendMode.MULTIPLY;
@@ -68,6 +69,46 @@ class GameState extends FlxPhysState
 		add(orb);
 		
 		orb.shadow = orbShadow;
+		
+		// Other orbs
+		for (i in 0...5) 
+		{
+			var otherOrbShadow = new FlxSprite(100, 100, Assets.getBitmapData("assets/OtherOrbShadow.png"));
+			otherOrbShadow.centerOffsets();
+			otherOrbShadow.blend = BlendMode.MULTIPLY;
+			
+			var otherOrb = new Orb();
+			otherOrb.loadGraphic("assets/OtherOrb.png", true, false, 140, 140);
+			otherOrb.createCircularBody(50);
+			otherOrb.setBodyMaterial(1, 0.2, 0.4, 0.5);
+			otherOrb.antialiasing = true;
+			otherOrb.setDrag(1, 1);
+			
+			add(otherOrbShadow);
+			add(otherOrb);
+			
+			otherOrb.shadow = otherOrbShadow;
+			
+			switch (i) 
+			{
+				case 0: 
+					otherOrb.mainBody.position.setxy( 320 - 400, 240 - 400); 
+					otherOrb.frame = 0;
+				case 1: 
+					otherOrb.mainBody.position.setxy(320 + 400, 240 - 400); 
+					otherOrb.frame = 4;
+				case 2:
+					otherOrb.mainBody.position.setxy(320 + 400, 240 + 400); 
+					otherOrb.frame = 3;
+				case 3:
+					otherOrb.mainBody.position.setxy( -300, 240); 
+					otherOrb.frame = 2;
+				case 4:
+					otherOrb.mainBody.position.setxy(0, 240 + 400); 
+					otherOrb.frame = 1;
+			}
+			otherOrb.mainBody.velocity.setxy(Std.random(150) - 75, Std.random(150) - 75);
+		}
 		
 		hud = new HUD();
 		add(hud);
