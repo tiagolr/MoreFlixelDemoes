@@ -8,6 +8,7 @@ import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
 import nme.Assets;
+import nme.display.BitmapData;
 import nme.display.BlendMode;
 import nme.Lib;
 import org.flixel.FlxCamera;
@@ -32,13 +33,15 @@ class GameState extends FlxPhysState
 	static inline var LEVEL_MIN_Y = -Lib.current.stage.stageHeight / 2;
 	static inline var LEVEL_MAX_Y = Lib.current.stage.stageHeight * 1.5;
 	
+	#if TRUE_ZOOM_OUT
+	private var firstUpdate:Bool;
+	#end
 	private var orb:Orb;
 	private var orbShadow:FlxSprite;
 	private var hud:HUD;
 	private var hudCam:FlxCamera;
-	#if TRUE_ZOOM_OUT
-	private var firstUpdate:Bool;
-	#end
+	private var overlayCamera:FlxCamera;
+
 
 	override public function create():Void 
 	{	
@@ -109,6 +112,31 @@ class GameState extends FlxPhysState
 			}
 			otherOrb.mainBody.velocity.setxy(Std.random(150) - 75, Std.random(150) - 75);
 		}
+		// Camera OVerlay ---------------------------------------------------------------------------
+		var cameraOverlay = new FlxSprite(-10000,-10000);
+		cameraOverlay.makeGraphic(640, 480, 0x0);
+		//cameraOverlay.scrollFactor.make(0, 0);
+		cameraOverlay.antialiasing = true;
+		var offset:Int = 100;
+		// Left Up Corner
+		cameraOverlay.drawLine(offset, offset, offset + 50, offset, 0xFFFFFFFF, 3);
+		cameraOverlay.drawLine(offset, offset, offset, offset + 50, 0xFFFFFFFF, 3);
+		// Right Up Corner
+		cameraOverlay.drawLine(640 - offset, offset, 640 - offset - 50, offset, 0xFFFFFFFF, 3);
+		cameraOverlay.drawLine(640 - offset, offset, 640 - offset, offset + 50, 0xFFFFFFFF, 3);
+		// Bottom Left Corner
+		cameraOverlay.drawLine(offset, 480 - offset, offset + 50, 480 - offset, 0xFFFFFFFF, 3);
+		cameraOverlay.drawLine(offset, 480 - offset, offset, 480 - offset - 50, 0xFFFFFFFF, 3);
+		// Bottom Right Corner
+		cameraOverlay.drawLine(640 - offset, 480 - offset, 640 - offset - 50, 480 - offset, 0xFFFFFFFF, 3);
+		cameraOverlay.drawLine(640 - offset, 480 - offset, 640 - offset, 480 - offset - 50, 0xFFFFFFFF, 3);
+		
+		overlayCamera = new FlxCamera(0, 0, 640, 720);
+		overlayCamera.follow(cameraOverlay);
+		overlayCamera.bgColor = 0x0;
+		FlxG.addCamera(overlayCamera);
+		add(cameraOverlay);
+		//---------------------------------------------------------------------------
 		
 		hud = new HUD();
 		add(hud);
@@ -191,6 +219,9 @@ class GameState extends FlxPhysState
 							   false );
 							   
 		hud.updateZoom(FlxG.camera.zoom);
+		//
+		//if (zoom > 1)
+			//cameraOverlay.scale.make(1 / zoom, 1 / zoom);
 							
 	}
 
@@ -301,6 +332,7 @@ class GameState extends FlxPhysState
 		FlxG.camera = FlxG.addCamera(new FlxCamera(0, 0, 640, 480, 1));
 		#end
 		FlxG._game.swapChildren(FlxG.camera._flashSprite, hudCam._flashSprite);
+		FlxG._game.swapChildren(FlxG.camera._flashSprite, overlayCamera._flashSprite);
 		
 		FlxG.camera.follow(orb, newCamStyle, null, oldCam.followLerp);
 		FlxG.camera.followAdjust(oldCam.followLead.x, oldCam.followLead.y);
@@ -314,7 +346,7 @@ class GameState extends FlxPhysState
 			case 1:hud.updateStyle("STYLE_PLATFORMER");
 			case 2:hud.updateStyle("STYLE_TOPDOWN");
 			case 3:hud.updateStyle("STYLE_TOPDOWN_TIGHT");
-			case 4:hud.updateStyle("STYLE_SCREEN_BY_SCREEN");
+			case 4:hud.updateStyle("STYLE_SCREEN_BY_SCREEN"); setZoom(1);
 			case 5:hud.updateStyle("STYLE_NO_DEAD_ZONE");
 		}
 	}

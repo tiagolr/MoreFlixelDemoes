@@ -21,8 +21,8 @@ class HUD extends FlxGroup
 	{
 		super();
 		
-		background = new FlxSprite(10000, -40, null);
-		background.makeGraphic(200, 180, 0xFF000000);
+		background = new FlxSprite(10000 - 50, -175, null);
+		background.makeGraphic(300, 360, 0xFF000000);
 		add(background);
 		
 		add(new FlxText(10010, 10, 200 - 10, "Use [W,A,S,D] to control the orb.\n\n[Y] or [H] to change camera style.\n\n\n\n[U] or [J] to change lerp.\n\n\n\n[I] or [K] to change lead.\n\n\n\n[O] or [L] to change zoom.")); 
@@ -43,14 +43,6 @@ class HUD extends FlxGroup
 		txtZoom.setFormat(null, 11, 0x55FF55, "left");
 		add(txtZoom);
 		
-		//txtStyle.scale.x = 2;
-		//txtStyle.scale.y = 2;
-		//txtLerp.scale.x = 2;
-		//txtLerp.scale.y = 2;
-		//txtLead.scale.x = 2;
-		//txtLead.scale.y = 2;
-		//txtZoom.scale.x = 2;
-		//txtZoom.scale.y = 2;
 	}
 	
 	public function updateStyle(string:String) 
