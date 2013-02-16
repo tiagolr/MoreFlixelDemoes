@@ -1,5 +1,5 @@
 package ;
-import addons.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysSprite;
 import nme.Assets;
 import org.flixel.FlxG;
 import org.flixel.FlxSprite;
@@ -18,7 +18,7 @@ class Orb extends FlxPhysSprite
 	{
 		super(FlxG.width / 2, FlxG.height / 2, Assets.getBitmapData("assets/Orb.png"));
 		createCircularBody(18);
-		mainBody.allowRotation = false;
+		body.allowRotation = false;
 		setDrag(0.98, 1);
 	}
 	

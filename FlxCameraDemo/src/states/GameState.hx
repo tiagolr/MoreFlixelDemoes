@@ -1,6 +1,6 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysSprite;
 import nape.Config;
 import nape.geom.Vec2;
 import nape.phys.Body;
@@ -46,6 +46,10 @@ class GameState extends FlxPhysState
 	override public function create():Void 
 	{	
 		super.create();
+		
+		#if !FLX_NO_MOUSE
+		FlxG.mouse.show();
+		#end
 		
 		#if TRUE_ZOOM_OUT
 		FlxG.width = 640; // For 1/2 zoom out
@@ -95,22 +99,22 @@ class GameState extends FlxPhysState
 			switch (i) 
 			{
 				case 0: 
-					otherOrb.mainBody.position.setxy( 320 - 400, 240 - 400); 
+					otherOrb.body.position.setxy( 320 - 400, 240 - 400); 
 					otherOrb.frame = 0;
 				case 1: 
-					otherOrb.mainBody.position.setxy(320 + 400, 240 - 400); 
+					otherOrb.body.position.setxy(320 + 400, 240 - 400); 
 					otherOrb.frame = 4;
 				case 2:
-					otherOrb.mainBody.position.setxy(320 + 400, 240 + 400); 
+					otherOrb.body.position.setxy(320 + 400, 240 + 400); 
 					otherOrb.frame = 3;
 				case 3:
-					otherOrb.mainBody.position.setxy( -300, 240); 
+					otherOrb.body.position.setxy( -300, 240); 
 					otherOrb.frame = 2;
 				case 4:
-					otherOrb.mainBody.position.setxy(0, 240 + 400); 
+					otherOrb.body.position.setxy(0, 240 + 400); 
 					otherOrb.frame = 1;
 			}
-			otherOrb.mainBody.velocity.setxy(Std.random(150) - 75, Std.random(150) - 75);
+			otherOrb.body.velocity.setxy(Std.random(150) - 75, Std.random(150) - 75);
 		}
 		// Camera OVerlay ---------------------------------------------------------------------------
 		var cameraOverlay = new FlxSprite(-10000,-10000);
@@ -261,13 +265,13 @@ class GameState extends FlxPhysState
 		
 		var speed = 20;
 		if (FlxG.keys.A)
-			orb.mainBody.applyImpulse(new Vec2( -speed, 0));
+			orb.body.applyImpulse(new Vec2( -speed, 0));
 		if (FlxG.keys.S)
-			orb.mainBody.applyImpulse(new Vec2( 0, speed));
+			orb.body.applyImpulse(new Vec2( 0, speed));
 		if (FlxG.keys.D)
-			orb.mainBody.applyImpulse(new Vec2( speed, 0));
+			orb.body.applyImpulse(new Vec2( speed, 0));
 		if (FlxG.keys.W)
-			orb.mainBody.applyImpulse(new Vec2( 0, -speed));
+			orb.body.applyImpulse(new Vec2( 0, -speed));
 			
 		if (FlxG.keys.justPressed("Y")) 
 			setStyle(1);
