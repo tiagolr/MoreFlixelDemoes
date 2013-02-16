@@ -27,6 +27,8 @@ class Shooter extends FlxGroup
 			spr.createCircularBody(8);
 			spr.body.allowRotation = false;
 			spr.setBodyMaterial(0, .2, .4, 11);
+			spr.body.cbTypes.add(CB_BULLET);
+			spr.body.isBullet = true;
 			spr.kill();
 			add(spr);
 		}
@@ -43,8 +45,6 @@ class Shooter extends FlxGroup
 			var spr:FlxPhysSprite = cast(recycle(FlxPhysSprite), FlxPhysSprite);
 			spr.revive();
 			spr.body.position.y = 30;
-			spr.body.cbTypes.add(CB_BULLET);
-			spr.body.isBullet = true;
 			spr.body.position.x = 30 + Std.random(640 - 30);
 			var angle = FlxU.getAngle(new FlxPoint(FlxG.mouse.x, FlxG.mouse.y), 
 									  new FlxPoint(spr.body.position.x, spr.body.position.y));

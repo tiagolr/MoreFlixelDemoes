@@ -6,22 +6,17 @@ import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
 import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
-import nape.geom.GeomPoly;
-import nape.geom.Vec2;
-import nape.phys.Body;
-import nape.phys.BodyType;
-import nape.phys.Material;
-import nape.shape.Polygon;
+import nme.Assets;
+import nme.display.BitmapData;
 import org.flixel.FlxG;
-import org.flixel.FlxSprite;
-import org.flixel.FlxU;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class Piramid extends FlxPhysState
-{	
+class Pixelizer extends FlxPhysState 
+{
+
 	private var shooter:Shooter;
 	
 	override public function create():Void 
@@ -30,10 +25,10 @@ class Piramid extends FlxPhysState
 		FlxG.mouse.show();
 		
 		// Sets gravity.
-		FlxPhysState.space.gravity.setxy(0, 500);
+		//FlxPhysState.space.gravity.setxy(0, 1500);
 
 		createWalls( -2000, -2000, 1640, 480);
-		createBricks();
+		createPixels();
 		
 		shooter = new Shooter();
 		add(shooter);
@@ -48,32 +43,27 @@ class Piramid extends FlxPhysState
 	
 	public function onBulletColides(clbk:InteractionCallback) 
 	{
-		shooter.getFirstAlive().kill();
+		if (shooter.getFirstAlive() != null) 
+		{
+			shooter.getFirstAlive().kill();
+		}
 	}
 	
-	private function createBricks() 
+	private function createPixels() 
 	{
-		var brick:FlxPhysSprite;
-		var brickHeight = 30;
-		var brickWidth = 60;
-		var levels = 8;
-		for (i in 0...levels)
+		var image:BitmapData = Assets.getBitmapData("assets/logo.png");
+		
+		for (x in 0...30) 
 		{
-			for (j in 0...(levels - i)) 
+			for (y in 0...30)
 			{
-				brick = new FlxPhysSprite();
-				brick.makeGraphic(brickWidth, brickHeight, 0x0);
-				brick.createRectangularBody();
-				brick.setBodyMaterial(.5, .5, .5, 2);
-				brick.body.position.y = FlxG.height - brickHeight / 2 - brickHeight * i - 10;
-				brick.body.position.x = (FlxG.width / 2 - brickWidth / 2 * (levels - i - 1)) + brickWidth * j; 
-				add(brick);
+				var spr:FlxPhysSprite = new FlxPhysSprite(x * 4, y * 4);
+				spr.makeGraphic(4, 4, 0xFFFFFFFF);
+				spr.createRectangularBody();
+				add(spr);
 			}
 		}
-		
-	}
-	
-	
+	}	
 	
 	override public function update():Void 
 	{	
