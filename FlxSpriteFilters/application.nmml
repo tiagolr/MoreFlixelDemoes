@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-	<app title="SpriteFilters" file="SpriteFilters" path="bin" main="Main" version="1.0.0" company="TiagoLr ( ~~~ProG4mr~~~)" />
+	<app title="FlxSpriteFilters" file="FlxSpriteFilters" path="bin" main="Main" version="1.0.0" company="TiagoLr ( ~~~ProG4mr~~~)" />
 
 	<set name="SWF_VERSION" value="10.1" />
 	<window background="#000000" fps="60" />
