@@ -32,15 +32,10 @@ class FlxCameraDemo extends FlxGame
 		#end
 		
 		#if (flash || desktop || neko)
-		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), GameState, ratio, 60, 60, true);
+		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), GameState, ratio, 60, 60);
 		#else
-		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), GameState, ratio, 60, 30, true);
+		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), GameState, ratio, 60, 30);
 		#end
-
-		forceDebugger = true;
-		useSystemCursor = true;
-		mouseEnabled = true;
-		_mouse.visible = true;
 	}
 
 }
