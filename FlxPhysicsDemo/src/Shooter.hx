@@ -1,5 +1,5 @@
 package ;
-import addons.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysSprite;
 import nape.callbacks.CbType;
 import org.flixel.FlxG;
 import org.flixel.FlxGroup;

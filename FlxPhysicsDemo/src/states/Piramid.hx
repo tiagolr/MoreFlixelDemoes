@@ -1,6 +1,7 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import FlxPhysicsDemo;
+import org.flixel.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -70,7 +71,6 @@ class Piramid extends FlxPhysState
 				add(brick);
 			}
 		}
-		
 	}
 	
 	
@@ -81,6 +81,11 @@ class Piramid extends FlxPhysState
 		
 		if (FlxG.keys.justPressed("G"))
 			disablePhysDebug(); // PhysState method to remove the debug graphics.
+			
+		if (FlxG.keys.justPressed("LEFT"))
+			FlxPhysicsDemo.prevState();
+		if (FlxG.keys.justPressed("RIGHT"))
+			FlxPhysicsDemo.nextState();
 	}
 	
 }

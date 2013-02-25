@@ -1,6 +1,6 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;

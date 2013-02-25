@@ -1,6 +1,6 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -129,6 +129,12 @@ class SolarSystem extends FlxPhysState
 			
 		if (FlxG.keys.justPressed("D"))
 			planets[0].body.applyImpulse(new Vec2(10, 0));
+			
+		
+		if (FlxG.keys.justPressed("LEFT"))
+			FlxPhysicsDemo.prevState();
+		if (FlxG.keys.justPressed("RIGHT"))
+			FlxPhysicsDemo.nextState();
 	}
 	
 	

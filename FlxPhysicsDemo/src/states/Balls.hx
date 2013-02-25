@@ -1,6 +1,6 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -103,6 +103,11 @@ class Balls extends FlxPhysState
 			disablePhysDebug(); // PhysState method to remove the debug graphics.
 		if (FlxG.keys.justPressed("R"))
 			FlxG.resetState();
+			
+		if (FlxG.keys.justPressed("LEFT"))
+			FlxPhysicsDemo.prevState();
+		if (FlxG.keys.justPressed("RIGHT"))
+			FlxPhysicsDemo.nextState();
 	}
 	
 }

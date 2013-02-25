@@ -1,6 +1,6 @@
 package states;
-import addons.nape.FlxPhysSprite;
-import addons.nape.FlxPhysState;
+import org.flixel.nape.FlxPhysSprite;
+import org.flixel.nape.FlxPhysState;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Quad;
 import nape.callbacks.CbEvent;
@@ -73,7 +73,6 @@ class Explosions extends FlxPhysState
 			for (j in 0...bitmapData.height) 
 			{
 				var color = bitmapData.getPixel32(i, j);
-				trace("alpha " + (color >>> 24));
 				if ((color >>> 24) > 0) 
 				{
 					spr = new FlxPhysSprite(x + i * 10, y + j * 10);
@@ -95,6 +94,13 @@ class Explosions extends FlxPhysState
 			disablePhysDebug(); // PhysState method to remove the debug graphics.
 		if (FlxG.keys.justPressed("R"))
 			FlxG.resetState();
+		
+					
+		if (FlxG.keys.justPressed("LEFT"))
+			FlxPhysicsDemo.prevState();
+		if (FlxG.keys.justPressed("RIGHT"))
+			FlxPhysicsDemo.nextState();
+			
 		if (FlxG.mouse.justPressed()) 
 		{
 			
@@ -175,8 +181,12 @@ class Explosion extends FlxSprite
 			parent.removeExplosion(this);
 		}
 		
-		FlxG.log(" x " + x);
+		applyGravity();
 		
+	}
+	
+	private function applyGravity():Void 
+	{
 		for (i in buildingSprites)
 		{
 			var distance = FlxU.getDistance(new FlxPoint(i.x , i.y), new FlxPoint(trueX, trueY));
