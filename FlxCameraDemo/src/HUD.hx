@@ -3,7 +3,7 @@ import org.flixel.FlxG;
 import org.flixel.FlxGroup;
 import org.flixel.FlxSprite;
 import org.flixel.FlxText;
-import pgr.gconsole.GC;
+import pgr.gconsole.GameConsole;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
@@ -62,7 +62,7 @@ class HUD extends FlxGroup
 	
 	public function updateZoom(zoom:Float) 
 	{
-		GC.log("zoom  " + zoom);
+		GameConsole.log("zoom  " + zoom);
 		txtZoom.text = "Camera Zoom: " + Math.floor(zoom * 10) / 10;
 	}
 	
