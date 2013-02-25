@@ -47,6 +47,10 @@ class GameState extends FlxPhysState
 	{	
 		super.create();
 		
+		#if !FLX_NO_MOUSE
+		FlxG.mouse.show();
+		#end
+		
 		#if TRUE_ZOOM_OUT
 		FlxG.width = 640; // For 1/2 zoom out
 		FlxG.height = 480; // For 1/2 zoom out
