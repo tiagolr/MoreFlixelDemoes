@@ -182,7 +182,9 @@ class GameState extends FlxPhysState
 		zoom = Math.round(zoom * 10) / 10; // corrects float precision problems.
 		
 		FlxG.camera.zoom = zoom;
-		
+		FlxG.camera.x = FlxG.width *.5 - ((FlxG.camera.width * zoom) *.5);
+		FlxG.camera.y = FlxG.height *.5 - ((FlxG.camera.height * zoom) *.5);
+
 		#if TRUE_ZOOM_OUT
 		zoom += 0.5; // For 1/2 zoom out.
 		zoom -= (1 - zoom); // For 1/2 zoom out.
