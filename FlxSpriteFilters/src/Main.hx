@@ -24,8 +24,11 @@ class Main extends Sprite
 
 	private function init(e) 
 	{
+		// import hxcpp lib.
+			// add nmml def : <haxedef name="HXCPP_DEBUGGER" if="cpp" />
 		var game:FlxGame = new FlixelTest();
 		addChild(game);
+		//new hxcpp.DebugStdio(true);
 		//FlxG.setDebuggerLayout(FlxG.DEBUGGER_BIG);
 	}
 	

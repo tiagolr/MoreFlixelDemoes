@@ -1,9 +1,11 @@
 package states;
 import com.eclecticdesignstudio.motion.Actuate;
 import com.eclecticdesignstudio.motion.easing.Linear;
+#if flash
 import flash.filters.BevelFilter;
 import flash.filters.DisplacementMapFilter;
 import flash.filters.DisplacementMapFilterMode;
+#end
 import nme.Assets;
 import nme.display.BitmapData;
 import nme.filters.BitmapFilter;
@@ -43,8 +45,10 @@ class PlayState extends FlxState
 	var filter2:GlowFilter;
 	var filter3:BlurFilter;
 	var filter4:DropShadowFilter;
+	#if flash
 	var filter5:BevelFilter;
 	var filter6:DisplacementMapFilter;
+	#end
 	
 	var isAnimSpr1:Bool;
 	var isAnimSpr2:Bool;
@@ -114,16 +118,19 @@ class PlayState extends FlxState
 		
 		filter3 = new BlurFilter();
 		spr3.addFilter(filter3, new FlxPoint(50, 50));
+		sp3.add
 		
 		filter4 = new DropShadowFilter(10, 45, 0, .75,10,10,1,1);
 		spr4.addFilter(filter4, new FlxPoint(30, 30));
 		
+		#if flash
 		filter5 = new BevelFilter(6);
 		spr5.addFilter(filter5, new FlxPoint(10, 10));
 		
 		filter6 = (new DisplacementMapFilter( Assets.getBitmapData("assets/StaticMap.png"), 
 						new Point(0, 0), 1, 1, 15, 1, DisplacementMapFilterMode.COLOR, 1, 0 ));
 		spr6.addFilter(filter6, new FlxPoint(30, 30));
+		#end
 		updateDisplaceFilter(); // 
 		
 		// Animations
@@ -133,8 +140,10 @@ class PlayState extends FlxState
 		Actuate.tween(filter3, 1.5, { blurX:50, blurY:50 } ).delay(0.5).repeat().reflect().onUpdate(updateSprite, [spr3]).ease(Linear.easeNone);
 		Actuate.pause(filter3);
 		
+		#if flash
 		Actuate.tween(filter5, 1, { distance:-6} ).delay(0.5).repeat().reflect().onUpdate(updateSprite, [spr5]).ease(Linear.easeNone);
 		Actuate.pause(filter5);
+		#end
 	}
 	
 	override public function update():Void 
@@ -184,11 +193,15 @@ class PlayState extends FlxState
 				isAnimSpr5 = !isAnimSpr5; // Toggle animation.
 				if (isAnimSpr5) 
 				{
+					#if flash
 					Actuate.resume(filter5);
+					#end
 				} 
 				else
 				{
+					#if flash
 					Actuate.pause(filter5);
+					#end
 				}
 			}
 			else
@@ -215,15 +228,19 @@ class PlayState extends FlxState
 	
 	function updateDisplaceFilter()
 	{
+		#if flash
 		filter6.scaleX = Math.random() * 20 - 10; // random between -10 and 10;
 		filter6.mapPoint = new Point(0, Math.random() * 30);
 		spr6.dirty = true;
+		#end
 	}
 	
 	function updateDropShadowFilter()
 	{
+		#if flash
 		filter4.angle -= 360 * FlxG.elapsed;
 		spr4.dirty = true;
+		#end
 	}
 	
 	function updateSprite(spr:FlxSprite)

@@ -16,16 +16,16 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="C:\Motion-Twin\Haxe\lib\nme/3,5,3/" />
+    <class path="C:\Motion-Twin\Haxe\lib\nme/3,5,5/" />
     <class path="bin/flash/haxe" />
   </classpaths>
   <!-- Build options -->
   <build>
-    <option directives="NAPE_RELEASE_BUILD&#xA;nme_install_tool" />
+    <option directives="NAPE_RELEASE_BUILD&#xA;nme_install_tool&#xA;web" />
     <option flashStrict="False" />
     <option mainClass="ApplicationMain" />
     <option enabledebug="True" />
-    <option additional="-swf-version 11" />
+    <option additional="-swf-version 10.1" />
   </build>
   <!-- haxelib libraries -->
   <haxelib>

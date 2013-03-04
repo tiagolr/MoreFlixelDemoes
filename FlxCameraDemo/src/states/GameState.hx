@@ -17,9 +17,10 @@ import org.flixel.FlxPoint;
 import org.flixel.FlxSprite;
 import org.flixel.FlxU;
 import HUD;
+import org.flixel.plugin.MouseInteractionManager;
 
 #if dev
-import pgr.gconsole.GC;
+import pgr.gconsole.GameConsole;
 #end
 
 /**
@@ -74,6 +75,9 @@ class GameState extends FlxPhysState
 		
 		add(orbShadow);
 		add(orb);
+		
+		MouseInteractionManager.iniTimerManager();
+		MouseInteractionManager.addSprite(orb);
 		
 		orb.shadow = orbShadow;
 		
@@ -149,18 +153,18 @@ class GameState extends FlxPhysState
 		FlxG.camera.follow(orb, 0, null, 0);
 		FlxG.camera.followAdjust(0, 0);
 		
-		disablePhysDebug();
+		//disablePhysDebug();
 		
 		#if dev
-		GC.init();
-		GC.registerVariable(FlxG.camera.scroll, "x", "scrollX", true);
-		GC.registerVariable(FlxG.camera.scroll, "y", "scrollY", true);
-		GC.registerVariable(FlxG.camera, "x", "camX", true);
-		GC.registerVariable(FlxG.camera, "y", "camY", true);
-		GC.registerVariable(FlxG.camera, "width", "camWidth", true);
-		GC.registerVariable(FlxG.camera, "height", "camHeight", true);
-		GC.registerVariable(FlxG.camera, "zoom", "camZoom");
-		GC.registerFunction(this, "setZoom", "zoom"); 
+		GameConsole.init();
+		GameConsole.registerVariable(FlxG.camera.scroll, "x", "scrollX", true);
+		GameConsole.registerVariable(FlxG.camera.scroll, "y", "scrollY", true);
+		GameConsole.registerVariable(FlxG.camera, "x", "camX", true);
+		GameConsole.registerVariable(FlxG.camera, "y", "camY", true);
+		GameConsole.registerVariable(FlxG.camera, "width", "camWidth", true);
+		GameConsole.registerVariable(FlxG.camera, "height", "camHeight", true);
+		GameConsole.registerVariable(FlxG.camera, "zoom", "camZoom");
+		GameConsole.registerFunction(this, "setZoom", "zoom"); 
 		#end	
 		
 		#if TRUE_ZOOM_OUT
@@ -293,7 +297,8 @@ class GameState extends FlxPhysState
 		if (FlxG.keys.justPressed("L"))
 			setZoom(FlxG.camera.zoom - .1);
 			
-			
+		if (FlxG.keys.justPressed("M"))
+			FlxG.camera.shake();
 		
 	}
 	

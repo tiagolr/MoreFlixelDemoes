@@ -26,7 +26,7 @@ class Orb extends FlxPhysSprite
 	{
 		super.update();
 		
-		if (FlxG.camera.followLead.x == 0) 
+		if (FlxG.camera.target != null && FlxG.camera.followLead.x == 0) // target check is used for debug purposes.
 		{
 			x = FlxU.round(x); // Smooths camera and orb shadow following. Does not work well with camera lead.
 			y = FlxU.round(y); // Smooths camera and orb shadow following. Does not work well with camera lead.

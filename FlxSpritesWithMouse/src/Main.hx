@@ -29,7 +29,7 @@ class Main extends Sprite
 	static public function main() 
 	{
 		#if (flash9 || flash10)
-			haxe.Log.trace = function(v,?pos) { untyped __global__["trace"](pos.className+"#"+pos.methodName+"("+pos.lineNumber+"):",v); }
+			//haxe.Log.trace = function(v,?pos) { untyped __global__["trace"](pos.className+"#"+pos.methodName+"("+pos.lineNumber+"):",v); }
 		#end
 		
 		var stage = Lib.current.stage;
