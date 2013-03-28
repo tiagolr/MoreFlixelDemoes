@@ -68,7 +68,6 @@ class PlayState extends FlxState
 		FlxG.mouse.show();
 		
 		var txt:FlxText = new FlxText(0, 10, 640, " Sprite filters - click on each sprite to animate or stop animation. ", 8);
-		txt.color = 0xAAAAAA;
 		txt.alignment = "center";
 		add (txt);
 		
