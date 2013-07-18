@@ -1,5 +1,6 @@
 package ;
 import flash.Lib;
+import flixel.addons.nape.FlxPhysSprite;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.addons.nape.FlxPhysState;
@@ -10,6 +11,7 @@ import states.Pixelizer;
 import states.SolarSystem;
 import states.Balloons;
 import states.Blob;
+import states.Fight;
 import FlxPhysicsDemo;
 
 /**
@@ -33,9 +35,9 @@ class FlxPhysicsDemo extends FlxGame
 		var ratio:Float = Math.min(ratioX, ratioY);
 		
 		#if (flash || desktop || neko)
-		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Blob, ratio, 60, 60);
+		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Fight, ratio, 60, 60);
 		#else
-		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Blob, ratio, 60, 30);
+		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Fight, ratio, 60, 30);
 		#end
 	}
 	

@@ -34,6 +34,7 @@ class SolarSystem extends FlxPhysState
 		
 		FlxPhysState.space.worldAngularDrag = 0;
 		FlxPhysState.space.worldLinearDrag = 0;
+		FlxPhysState.space.gravity = new Vec2(0, 0);
 
 		createWalls();
 		
@@ -63,28 +64,28 @@ class SolarSystem extends FlxPhysState
 		
 		
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 70, null);
+		planet = new FlxPhysSprite(halfWidth, halfHeight + 70);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(5);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 100, null);
+		planet = new FlxPhysSprite(halfWidth, halfHeight + 100);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(10);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 150, null);
+		planet = new FlxPhysSprite(halfWidth, halfHeight + 150);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(15);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 200, null);
+		planet = new FlxPhysSprite(halfWidth, halfHeight + 200);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(9);
 		planets.push(planet);

@@ -9,6 +9,7 @@ import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
 import nape.constraint.DistanceJoint;
 import nape.geom.Vec2;
+import nape.shape.Circle;
 
 /**
  * ...
@@ -60,7 +61,10 @@ class Balloons extends FlxPhysState
 		
 		for (b in listBalloons)
 		{
-			var constrain:DistanceJoint = new DistanceJoint(box.body, b.body, box.body.localCOM, b.body.localCOM, 0, 200);
+			var yOffsetB:Vec2 = new Vec2(0, 35);
+			var yOffsetBox:Vec2 = new Vec2(0, -20);
+			
+			var constrain:DistanceJoint = new DistanceJoint(box.body, b.body, yOffsetBox.add(box.body.localCOM), yOffsetB.add(b.body.localCOM), 0, 200);
 			constrain.space = FlxPhysState.space;
 		}
 		
@@ -92,5 +96,8 @@ class Balloon extends FlxPhysSprite
 	{
 		super(X, Y);
 		createCircularBody(25);
+		var circle = new Circle(5);
+		circle.translate(new Vec2(0, 25));
+		body.shapes.add(circle);
 	}
 }
