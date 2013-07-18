@@ -10,8 +10,9 @@
 	
 	<!-- classpath, haxe libs -->
 	<source path="src" />
-	<haxelib name="nme" />
+	<haxelib name="openfl" />
 	<haxelib name="flixel"/>
+	<haxelib name="flixel-addons"/>
 	<haxelib name="nape"/>
 	<haxelib name="hxcpp"/>
 	<haxelib name="actuate"/>
@@ -34,9 +35,5 @@
 	<haxedef name="NAPE_RELEASE_BUILD"/>
 	<haxedef name="HXCPP_DEBUGGER" if="cpp" />
 	<haxedef name="FLX_DEBUG"/>
-	
-	<!-- optimize JS output -->
-	<haxeflag name="--dead-code-elimination" if="html5" />
-	<haxeflag name="--js-modern" if="html5" />
 	
 </project>

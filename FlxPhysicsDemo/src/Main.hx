@@ -1,10 +1,10 @@
 package ;
 
-import nme.display.Sprite;
-import nme.events.Event;
-import nme.Lib;
-import org.flixel.FlxG;
-import org.flixel.FlxGame;
+import flash.display.Sprite;
+import flash.events.Event;
+import flash.Lib;
+import flixel.FlxG;
+import flixel.FlxGame;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
@@ -37,8 +37,8 @@ class Main extends Sprite
 		#end
 		
 		var stage = Lib.current.stage;
-		stage.scaleMode = nme.display.StageScaleMode.NO_SCALE;
-		stage.align = nme.display.StageAlign.TOP_LEFT;
+		stage.scaleMode = flash.display.StageScaleMode.NO_SCALE;
+		stage.align = flash.display.StageAlign.TOP_LEFT;
 		
 		Lib.current.addChild(new Main());
 	}

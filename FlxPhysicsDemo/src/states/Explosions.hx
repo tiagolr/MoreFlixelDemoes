@@ -1,8 +1,9 @@
 package states;
-import org.flixel.nape.FlxPhysSprite;
-import org.flixel.nape.FlxPhysState;
-import com.eclecticdesignstudio.motion.Actuate;
-import com.eclecticdesignstudio.motion.easing.Quad;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysState;
+import flixel.util.FlxMath;
+import motion.Actuate;
+import motion.easing.Quad;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -10,14 +11,14 @@ import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
 import nape.geom.Vec2;
 import nape.phys.Material;
-import nme.Assets;
-import nme.display.BitmapData;
-import nme.display.Sprite;
-import org.flixel.FlxG;
-import org.flixel.FlxPoint;
-import org.flixel.FlxSprite;
-import org.flixel.FlxState;
-import org.flixel.FlxU;
+import flash.display.BitmapData;
+import flash.display.Sprite;
+import flixel.FlxG;
+import flixel.util.FlxPoint;
+import flixel.FlxSprite;
+import flixel.FlxState;
+import flixel.util.FlxAngle;
+import openfl.Assets;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
@@ -142,7 +143,7 @@ class Explosions extends FlxPhysState
 	
 }
 
-import org.flixel.FlxSprite;
+
 class Explosion extends FlxSprite
 {
 	static public inline var EXP_FORCE:Int = 1500;
@@ -189,7 +190,7 @@ class Explosion extends FlxSprite
 	{
 		for (i in buildingSprites)
 		{
-			var distance = FlxU.getDistance(new FlxPoint(i.x , i.y), new FlxPoint(trueX, trueY));
+			var distance = FlxMath.getDistance(new FlxPoint(i.x , i.y), new FlxPoint(trueX, trueY));
 			if (distance < this.width * scale.x / 2) 
 			{
 				var impulse = EXP_FORCE / (distance * distance);

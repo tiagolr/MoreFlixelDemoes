@@ -16,7 +16,6 @@
   <!-- Other classes to be compiled into your SWF -->
   <classpaths>
     <class path="src" />
-    <class path="C:\Motion-Twin\Haxe\lib\nme/3,5,5/" />
     <class path="bin/flash/haxe" />
   </classpaths>
   <!-- Build options -->
@@ -31,6 +30,7 @@
   <haxelib>
     <library name="nme" />
     <library name="flixel" />
+	<library name="flixel-addons" />
     <library name="nape" />
     <library name="hxcpp" />
     <library name="actuate" />

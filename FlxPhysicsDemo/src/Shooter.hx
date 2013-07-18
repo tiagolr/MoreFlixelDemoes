@@ -1,10 +1,11 @@
 package ;
-import org.flixel.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.util.FlxAngle;
 import nape.callbacks.CbType;
-import org.flixel.FlxG;
-import org.flixel.FlxGroup;
-import org.flixel.FlxPoint;
-import org.flixel.FlxU;
+import flixel.FlxG;
+import flixel.group.FlxGroup;
+import flixel.util.FlxPoint;
+import flixel.util.FlxMath;
 
 /**
  * Fires small projectiles to where the user clicks.
@@ -46,7 +47,7 @@ class Shooter extends FlxGroup
 			spr.revive();
 			spr.body.position.y = 30;
 			spr.body.position.x = 30 + Std.random(640 - 30);
-			var angle = FlxU.getAngle(new FlxPoint(FlxG.mouse.x, FlxG.mouse.y), 
+			var angle = FlxAngle.getAngle(new FlxPoint(FlxG.mouse.x, FlxG.mouse.y), 
 									  new FlxPoint(spr.body.position.x, spr.body.position.y));
 			angle += 90;
 			spr.body.velocity.setxy(impulse * Math.cos(angle * 3.14 / 180),

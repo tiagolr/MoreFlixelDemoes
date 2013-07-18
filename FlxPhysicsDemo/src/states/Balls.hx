@@ -1,6 +1,6 @@
 package states;
-import org.flixel.nape.FlxPhysSprite;
-import org.flixel.nape.FlxPhysState;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -10,7 +10,7 @@ import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
 import nape.geom.Vec2;
 import nape.phys.Material;
-import org.flixel.FlxG;
+import flixel.FlxG;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )

@@ -1,6 +1,6 @@
 package states;
-import org.flixel.nape.FlxPhysSprite;
-import org.flixel.nape.FlxPhysState;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -8,9 +8,10 @@ import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
 import nape.geom.Vec2;
 import nape.phys.BodyType;
-import org.flixel.FlxG;
-import org.flixel.FlxPoint;
-import org.flixel.FlxU;
+import flixel.FlxG;
+import flixel.util.FlxPoint;
+import flixel.util.FlxMath;
+import flixel.util.FlxAngle;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
@@ -21,9 +22,9 @@ class SolarSystem extends FlxPhysState
 
 	private var shooter:Shooter;
 	private var planets:Array<FlxPhysSprite>;
-	private static inline var halfWidth:Int = Std.int(FlxG.width / 2);
-	private static inline var halfHeight:Int = Std.int(FlxG.height / 2);
-	private static inline var gravity:Int = Std.int(5e4);
+	private static var halfWidth:Int = Std.int(FlxG.width / 2);
+	private static var halfHeight:Int = Std.int(FlxG.height / 2);
+	private static var gravity:Int = Std.int(5e4);
 	private var sun:FlxPhysSprite;
 	
 	override public function create():Void 
@@ -108,8 +109,8 @@ class SolarSystem extends FlxPhysState
 			
 		for (planet in planets)
 		{
-			var angle = FlxU.getAngle(new FlxPoint(planet.x, planet.y), new FlxPoint(halfWidth, halfHeight)) - 90;
-			var distance = FlxU.getDistance(new FlxPoint(planet.x, planet.y), new FlxPoint(halfWidth, halfHeight));
+			var angle = FlxAngle.getAngle(new FlxPoint(planet.x, planet.y), new FlxPoint(halfWidth, halfHeight)) - 90;
+			var distance = FlxMath.getDistance(new FlxPoint(planet.x, planet.y), new FlxPoint(halfWidth, halfHeight));
 			
 			var impulse = gravity * planet.body.mass / (distance * distance);
 			var force:Vec2 = new Vec2((planet.x - halfWidth) * -impulse, (planet.y - halfHeight) * -impulse);

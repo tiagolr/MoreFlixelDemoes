@@ -339,6 +339,7 @@ class GameState extends FlxPhysState
 		FlxG.camera = FlxG.addCamera(new FlxCamera(Std.int( -640 / 2), Std.int( -480 / 2), 640 * 2, 480 * 2, 1)); 
 		#else
 		FlxG.camera = FlxG.addCamera(new FlxCamera(0, 0, 640, 480, 1));
+		
 		#end
 		FlxG._game.swapChildren(FlxG.camera._flashSprite, hudCam._flashSprite);
 		FlxG._game.swapChildren(FlxG.camera._flashSprite, overlayCamera._flashSprite);

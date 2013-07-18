@@ -1,14 +1,14 @@
 package states;
-import org.flixel.nape.FlxPhysSprite;
-import org.flixel.nape.FlxPhysState;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
 import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
-import nme.Assets;
-import nme.display.BitmapData;
-import org.flixel.FlxG;
+import flash.display.BitmapData;
+import flixel.FlxG;
+import openfl.Assets;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )

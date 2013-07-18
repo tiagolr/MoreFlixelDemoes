@@ -1,13 +1,15 @@
 package ;
-import nme.Lib;
-import org.flixel.FlxG;
-import org.flixel.FlxGame;
-import org.flixel.nape.FlxPhysState;
+import flash.Lib;
+import flixel.FlxG;
+import flixel.FlxGame;
+import flixel.addons.nape.FlxPhysState;
 import states.Balls;
 import states.Explosions;
 import states.Piramid;
 import states.Pixelizer;
 import states.SolarSystem;
+import states.Balloons;
+import states.Blob;
 import FlxPhysicsDemo;
 
 /**
@@ -31,9 +33,9 @@ class FlxPhysicsDemo extends FlxGame
 		var ratio:Float = Math.min(ratioX, ratioY);
 		
 		#if (flash || desktop || neko)
-		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Piramid, ratio, 60, 60);
+		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Blob, ratio, 60, 60);
 		#else
-		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Piramid, ratio, 60, 30);
+		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Blob, ratio, 60, 30);
 		#end
 	}
 	
@@ -41,25 +43,26 @@ class FlxPhysicsDemo extends FlxGame
 	{
 		currentState++;
 		currentState %= 4;
-		switchState();
+		changeState();
 	}
 	
 	public static function prevState()
 	{
 		currentState--;
 		currentState < 0 ? currentState = 3 : null;
-		switchState();
+		changeState();
 	}
 	
-	private static function switchState()
+	private static function changeState()
 	{
 		trace("current state " + currentState);
 		switch (currentState)
 		{
 			case 0:	FlxG.switchState(new Piramid());
-			case 1: FlxG.switchState(new Balls());
-			case 2: FlxG.switchState(new SolarSystem());
-			case 3: FlxG.switchState(new Explosions());
+			case 1: FlxG.switchState(new Balloons());
+			//case 1: FlxG.switchState(new Balls());
+			//case 2: FlxG.switchState(new SolarSystem());
+			//case 3: FlxG.switchState(new Explosions());
 		}
 	}
 

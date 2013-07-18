@@ -1,7 +1,7 @@
 package states;
 import FlxPhysicsDemo;
-import org.flixel.nape.FlxPhysSprite;
-import org.flixel.nape.FlxPhysState;
+import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxPhysState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -13,9 +13,8 @@ import nape.phys.Body;
 import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Polygon;
-import org.flixel.FlxG;
-import org.flixel.FlxSprite;
-import org.flixel.FlxU;
+import flixel.FlxG;
+import flixel.FlxSprite;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
