@@ -23,7 +23,7 @@ import FlxPhysicsDemo;
 
 class FlxPhysicsDemo extends FlxGame
 {
-	private static var currentState:Int = 0;
+	private static var currentState:Int = 3;
 	
 	public function new() 
 	{
@@ -62,6 +62,8 @@ class FlxPhysicsDemo extends FlxGame
 		{
 			case 0:	FlxG.switchState(new Piramid());
 			case 1: FlxG.switchState(new Balloons());
+			case 2: FlxG.switchState(new Blob());
+			case 3: FlxG.switchState(new Fight());
 			//case 1: FlxG.switchState(new Balls());
 			//case 2: FlxG.switchState(new SolarSystem());
 			//case 3: FlxG.switchState(new Explosions());

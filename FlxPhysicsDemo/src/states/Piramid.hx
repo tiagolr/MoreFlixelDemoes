@@ -79,7 +79,13 @@ class Piramid extends FlxPhysState
 		super.update();
 		
 		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
+			if (_physDbgSpr != null)
+				disablePhysDebug(); // PhysState method to remove the debug graphics.
+			else
+				enablePhysDebug();
+			
+		if (FlxG.keys.justPressed("R"))
+			FlxG.resetState();
 			
 		if (FlxG.keys.justPressed("LEFT"))
 			FlxPhysicsDemo.prevState();

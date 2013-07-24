@@ -77,6 +77,20 @@ class Balloons extends FlxPhysState
 		{
 			b.body.applyImpulse(new Vec2(0, -20));
 		}
+		
+		if (FlxG.keys.justPressed("G"))
+			if (_physDbgSpr != null)
+				disablePhysDebug(); // PhysState method to remove the debug graphics.
+			else
+				enablePhysDebug();
+			
+		if (FlxG.keys.justPressed("R"))
+			FlxG.resetState();
+			
+		if (FlxG.keys.justPressed("LEFT"))
+			FlxPhysicsDemo.prevState();
+		if (FlxG.keys.justPressed("RIGHT"))
+			FlxPhysicsDemo.nextState();
 	}
 	
 	public function onBulletColides(clbk:InteractionCallback) 

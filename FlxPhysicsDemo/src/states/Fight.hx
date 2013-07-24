@@ -3,7 +3,9 @@ import flixel.addons.nape.FlxPhysSprite;
 import flixel.addons.nape.FlxPhysState;
 import flixel.FlxBasic;
 import flixel.FlxG;
+import flixel.FlxSprite;
 import flixel.group.FlxGroup;
+import flixel.plugin.MouseInteractionMgr;
 import flixel.util.FlxPoint;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
@@ -14,6 +16,7 @@ import flixel.addons.nape.FlxPhysSprite;
 import nape.callbacks.PreCallback;
 import nape.callbacks.PreFlag;
 import nape.callbacks.PreListener;
+import nape.constraint.DistanceJoint;
 import nape.constraint.PivotJoint;
 import nape.constraint.WeldJoint;
 import nape.dynamics.InteractionFilter;
@@ -26,6 +29,7 @@ import nape.geom.Vec2;
  */
 class Fight extends FlxPhysState
 {
+	public var grabJoint:DistanceJoint;
 	var shooter:Shooter;
 	
 	override public function create():Void 
@@ -33,15 +37,17 @@ class Fight extends FlxPhysState
 		super.create();
 		FlxG.mouse.show();
 		
-		createWalls();
-		createSongoku();
-		FlxPhysState.space.gravity.setxy(0, 100);
+		createWalls(0,-300,FlxG.width, FlxG.height - 30);
+		FlxPhysState.space.gravity.setxy(0, 400);
 		
+		disablePhysDebug();
 		
-		shooter = new Shooter();
-		add(shooter);
+		add(new FlxSprite(0, 0, "assets/dbzbg.jpg"));
 		
-		var songoku:Ragdoll = new Ragdoll(300,300);
+		//shooter = new Shooter();
+		//add(shooter);
+		
+		var songoku:Ragdoll = new Ragdoll(100,250);
 		songoku.init();
 		songoku.createGraphics("assets/GokuHead.png",
 								"assets/GokuUTorso.png",
@@ -52,6 +58,34 @@ class Fight extends FlxPhysState
 								"assets/GokuLLeg.png");
 		add(songoku);
 		
+		
+		
+		var vegeta:Ragdoll = new Ragdoll(550, 250);
+		vegeta.init();
+		vegeta.createGraphics("assets/VegeHead.png",
+								"assets/VegeUTorso.png",
+								"assets/VegeLTorso.png",
+								"assets/VegeUArm.png",
+								"assets/VegeLArm.png",
+								"assets/VegeULeg.png",
+								"assets/VegeLLeg.png");
+		add(vegeta);
+		
+		for (spr in songoku.sprites)
+		{
+			spr.antialiasing = true;
+			MouseInteractionMgr.addSprite(spr, onMouseDownSprite);
+		}
+		for (spr in vegeta.sprites)
+		{
+			spr.antialiasing = true;
+		}
+		
+		songoku.rLArm.body.applyImpulse(new Vec2(2000, -3000 + Math.random() * -100 + 200));
+		//songoku.rUArm.body.applyImpulse(new Vec2(1500, -2000));
+		vegeta.lLArm.body.applyImpulse(new Vec2(-2000, -3000+ Math.random() * -100 + 200));
+		//vegeta.lUArm.body.applyImpulse(new Vec2(-1500, -2000));
+		
 		FlxPhysState.space.listeners.add(new InteractionListener(CbEvent.BEGIN, 
 													 InteractionType.COLLISION, 
 													 Shooter.CB_BULLET,
@@ -60,9 +94,15 @@ class Fight extends FlxPhysState
 													 
 	}
 	
-	function createSongoku() 
+	function onMouseDownSprite(spr:FlxSprite) 
 	{
+		var spr2 : FlxPhysSprite = cast(spr, FlxPhysSprite);
+		grabJoint = new DistanceJoint(spr2.body, FlxPhysState.space.world, spr2.body.localCOM, new Vec2(FlxG.mouse.x, FlxG.mouse.y), 0, 10);
+		grabJoint.space = FlxPhysState.space;
 		
+		grabJoint.stiff = false;
+		grabJoint.damping = 1;
+		grabJoint.frequency = 20;
 	}
 	
 	public function onBulletColides(clbk:InteractionCallback) 
@@ -78,7 +118,10 @@ class Fight extends FlxPhysState
 		super.update();
 		
 		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
+			if (_physDbgSpr != null)
+				disablePhysDebug(); // PhysState method to remove the debug graphics.
+			else
+				enablePhysDebug();
 			
 		if (FlxG.keys.justPressed("R"))
 			FlxG.resetState();
@@ -87,6 +130,18 @@ class Fight extends FlxPhysState
 			FlxPhysicsDemo.prevState();
 		if (FlxG.keys.justPressed("RIGHT"))
 			FlxPhysicsDemo.nextState();
+			
+		if (grabJoint != null)
+		{
+			grabJoint.anchor2 = new Vec2(FlxG.mouse.x, FlxG.mouse.y);
+		}
+		if (FlxG.mouse.justReleased())
+		{
+			if (grabJoint == null)
+				return;
+			grabJoint.space = null;
+			grabJoint = null;
+		}
 	}
 	
 }
@@ -94,38 +149,38 @@ class Fight extends FlxPhysState
 
 class Ragdoll extends FlxGroup 
 {
-	var sprites:Array<FlxPhysSprite>;
+	public var sprites:Array<FlxPhysSprite>;
 	
-	var rULeg:FlxPhysSprite; // right upper leg.
-	var rLLeg:FlxPhysSprite; // right lower leg.
-	var lULeg:FlxPhysSprite; // left upper leg.
-	var lLLeg:FlxPhysSprite; // left lower leg.
+	public var rULeg:FlxPhysSprite; // right upper leg.
+	public var rLLeg:FlxPhysSprite; // right lower leg.
+	public var lULeg:FlxPhysSprite; // left upper leg.
+	public var lLLeg:FlxPhysSprite; // left lower leg.
 	
-	var rUArm:FlxPhysSprite; // right upper arm.
-	var rLArm:FlxPhysSprite; // right lower arm.
-	var lUArm:FlxPhysSprite; // left upper arm.
-	var lLArm:FlxPhysSprite; // left lower arm.
+	public var rUArm:FlxPhysSprite; // right upper arm.
+	public var rLArm:FlxPhysSprite; // right lower arm.
+	public var lUArm:FlxPhysSprite; // left upper arm.
+	public var lLArm:FlxPhysSprite; // left lower arm.
 	
-	var head:FlxPhysSprite; // head.
+	public var head:FlxPhysSprite; // head.
 	
-	var lTorso:FlxPhysSprite; // lower torso.
-	var uTorso:FlxPhysSprite; // upper torso.
+	public var lTorso:FlxPhysSprite; // lower torso.
+	public var uTorso:FlxPhysSprite; // upper torso.
 	
-	var scale:Float;
+	public var scale:Float;
 	
-	var joints:Array<PivotJoint>;
+	public var joints:Array<PivotJoint>;
 	
-	var larmSize:FlxPoint;
-	var uarmSize:FlxPoint;
-	var llegSize:FlxPoint;
-	var ulegSize:FlxPoint;
-	var uTorsoSize:FlxPoint;
-	var lTorsoSize:FlxPoint; 
-	var neckHeight:Float;
-	var headRadius:Float;
+	public var larmSize:FlxPoint;
+	public var uarmSize:FlxPoint;
+	public var llegSize:FlxPoint;
+	public var ulegSize:FlxPoint;
+	public var uTorsoSize:FlxPoint;
+	public var lTorsoSize:FlxPoint; 
+	public var neckHeight:Float;
+	public var headRadius:Float;
 	
-	var limbOffset:Float;
-	var torsoOffset:Float;
+	public var limbOffset:Float;
+	public var torsoOffset:Float;
 	
 	var startX:Float;
 	var startY:Float;
@@ -307,6 +362,7 @@ class Ragdoll extends FlxGroup
 		lLArm.loadGraphic(LowerArm); lLArm.scale.x *= -1;
 	}
 	
+	
 	function createJoints() 
 	{
 		var constrain: PivotJoint;
@@ -325,9 +381,9 @@ class Ragdoll extends FlxGroup
 		constrain.space = FlxPhysState.space;
 		
 		// Upper legs with lower torso.
-		constrain = new PivotJoint(lULeg.body, lTorso.body, new Vec2(0, -ulegSize.y / 2 + 3), new Vec2(-lTorsoSize.x / 2  + ulegSize.x / 2, lTorsoSize.y / 2 - 3));
+		constrain = new PivotJoint(lULeg.body, lTorso.body, new Vec2(0, -ulegSize.y / 2 + 3), new Vec2(-lTorsoSize.x / 2  + ulegSize.x / 2, lTorsoSize.y / 2 - 6));
 		constrain.space = FlxPhysState.space;
-		constrain = new PivotJoint(rULeg.body, lTorso.body, new Vec2(0, -ulegSize.y / 2 + 3), new Vec2(lTorsoSize.x / 2  - ulegSize.x / 2, lTorsoSize.y / 2 - 3));
+		constrain = new PivotJoint(rULeg.body, lTorso.body, new Vec2(0, -ulegSize.y / 2 + 3), new Vec2(lTorsoSize.x / 2  - ulegSize.x / 2, lTorsoSize.y / 2 - 6));
 		constrain.space = FlxPhysState.space;
 		
 		// Upper torso with mid lower.

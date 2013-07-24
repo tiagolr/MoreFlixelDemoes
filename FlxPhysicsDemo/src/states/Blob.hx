@@ -55,6 +55,12 @@ class Blob extends FlxPhysState
 		
 	}
 	
+	override public function destroy():Void 
+	{
+		FlxG.stage.removeChild(blob);
+		super.destroy();
+	}
+	
 	function createBlob() 
 	{
 		listBlobCircles = new Array<Body>();
@@ -126,7 +132,7 @@ class Blob extends FlxPhysState
 		if (FlxG.keys.justPressed("G"))
 			disablePhysDebug(); // PhysState method to remove the debug graphics.
 			
-		if (FlxG.keys.justPressed("LEFT"))
+		if (FlxG.keys.justPressed("LEFT")) 
 			FlxPhysicsDemo.prevState();
 		if (FlxG.keys.justPressed("RIGHT"))
 			FlxPhysicsDemo.nextState();

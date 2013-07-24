@@ -97,14 +97,14 @@ class PlayState extends FlxPhysState
 		
 		var body = cast(spr, FlxPhysSprite).body;
 		
-		cardJoint = new DistanceJoint(FlxPhysState.space.world, body, new Vec2(FlxG.mouse.x, FlxG.mouse.y),
+		var joint = new DistanceJoint(FlxPhysState.space.world, body, new Vec2(FlxG.mouse.x, FlxG.mouse.y),
 						body.worldPointToLocal(new Vec2(FlxG.mouse.x, FlxG.mouse.y)), 0, 0);
 						
-		cardJoint.stiff 	= false;
+		joint.stiff 	= false;
 		//cardJoint.maxForce = 100;
-		cardJoint.damping = 1;
-		cardJoint.frequency = 2;
-		cardJoint.space	= FlxPhysState.space;
+		joint.damping = 1;
+		joint.frequency = 2;
+		joint.space	= FlxPhysState.space;
 	}
 	
 	override public function update():Void 
