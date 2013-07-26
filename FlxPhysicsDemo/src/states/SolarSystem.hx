@@ -42,19 +42,9 @@ class SolarSystem extends FlxPhysState
 		
 		shooter = new Shooter();
 		add(shooter);
-		
-		FlxPhysState.space.listeners.add(new InteractionListener(CbEvent.BEGIN, 
-													 InteractionType.COLLISION, 
-													 Shooter.CB_BULLET,
-													 CbType.ANY_BODY,
-													 onBulletColides));
 											
 	}
 	
-	public function onBulletColides(clbk:InteractionCallback) 
-	{
-		shooter.getFirstAlive().kill();
-	}
 	
 	private function createSolarSystem() 
 	{
@@ -137,6 +127,8 @@ class SolarSystem extends FlxPhysState
 			FlxPhysicsDemo.prevState();
 		if (FlxG.keys.justPressed("RIGHT"))
 			FlxPhysicsDemo.nextState();
+		
+		
 	}
 	
 	

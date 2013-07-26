@@ -5,7 +5,7 @@ import flixel.FlxBasic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
-import flixel.plugin.MouseInteractionMgr;
+import flixel.plugin.MouseEventManager;
 import flixel.util.FlxPoint;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
@@ -74,7 +74,7 @@ class Fight extends FlxPhysState
 		for (spr in songoku.sprites)
 		{
 			spr.antialiasing = true;
-			MouseInteractionMgr.addSprite(spr, onMouseDownSprite);
+			MouseEventManager.addSprite(spr, onMouseDownSprite);
 		}
 		for (spr in vegeta.sprites)
 		{
@@ -85,12 +85,6 @@ class Fight extends FlxPhysState
 		//songoku.rUArm.body.applyImpulse(new Vec2(1500, -2000));
 		vegeta.lLArm.body.applyImpulse(new Vec2(-2000, -3000+ Math.random() * -100 + 200));
 		//vegeta.lUArm.body.applyImpulse(new Vec2(-1500, -2000));
-		
-		FlxPhysState.space.listeners.add(new InteractionListener(CbEvent.BEGIN, 
-													 InteractionType.COLLISION, 
-													 Shooter.CB_BULLET,
-													 CbType.ANY_BODY,
-													 onBulletColides));
 													 
 	}
 	
@@ -103,14 +97,6 @@ class Fight extends FlxPhysState
 		grabJoint.stiff = false;
 		grabJoint.damping = 1;
 		grabJoint.frequency = 20;
-	}
-	
-	public function onBulletColides(clbk:InteractionCallback) 
-	{
-		if (shooter.getFirstAlive() != null) 
-		{
-			shooter.getFirstAlive().kill();
-		}
 	}
 	
 	override public function update():Void 

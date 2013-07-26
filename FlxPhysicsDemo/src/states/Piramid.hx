@@ -1,4 +1,6 @@
 package states;
+import flixel.text.FlxText;
+import flixel.util.FlxRandom;
 import FlxPhysicsDemo;
 import flixel.addons.nape.FlxPhysSprite;
 import flixel.addons.nape.FlxPhysState;
@@ -15,6 +17,8 @@ import nape.phys.Material;
 import nape.shape.Polygon;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import openfl.Assets;
+import openfl.display.FPS;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
@@ -23,51 +27,76 @@ import flixel.FlxSprite;
 class Piramid extends FlxPhysState
 {	
 	private var shooter:Shooter;
+	private static var levels;
+	var bricks:Array<FlxPhysSprite>;
+	var fps:FPS;
 	
 	override public function create():Void 
 	{	
 		super.create();
 		FlxG.mouse.show();
 		
-		// Sets gravity.
-		FlxPhysState.space.gravity.setxy(0, 500);
+		disablePhysDebug();
+		
+		add(new FlxSprite(0, 0, "assets/piramidbg.jpg"));
 
+		if (Piramid.levels == 0)
+			Piramid.levels = 10;
+			
+		shooter = new Shooter();
+		add(shooter);	
+			
 		createWalls( -2000, -2000, 1640, 480);
 		createBricks();
 		
-		shooter = new Shooter();
-		add(shooter);
 		
-		FlxPhysState.space.listeners.add(new InteractionListener(CbEvent.BEGIN, 
-													 InteractionType.COLLISION, 
-													 Shooter.CB_BULLET,
-													 CbType.ANY_BODY,
-													 onBulletColides));
-											
+		
+		var txt:FlxText = new FlxText(FlxG.width - 100, 30, 100, "Bricks: " + bricks.length);
+		add(txt);
+		
+		
+		add(txt);
+		fps = new FPS(FlxG.width - 100, 5, 0xFFFFFF);
+		FlxG.stage.addChild(fps);
 	}
 	
-	public function onBulletColides(clbk:InteractionCallback) 
+	override public function destroy():Void 
 	{
-		shooter.getFirstAlive().kill();
+		super.destroy();
+		FlxG.stage.removeChild(fps);
 	}
+	
+
 	
 	private function createBricks() 
 	{
+		bricks = new Array<FlxPhysSprite>();
 		var brick:FlxPhysSprite;
-		var brickHeight = 30;
-		var brickWidth = 60;
-		var levels = 8;
+		
+		var brickHeight:Int = Std.int(8 * 40 / Piramid.levels); // magic number!
+		var brickWidth:Int = brickHeight * 2;
+		
+		
+		
 		for (i in 0...levels)
 		{
-			for (j in 0...(levels - i)) 
+			for (j in 0...(Piramid.levels - i)) 
 			{
 				brick = new FlxPhysSprite();
 				brick.makeGraphic(brickWidth, brickHeight, 0x0);
 				brick.createRectangularBody();
+				brick.loadGraphic("assets/brick" + Std.string(FlxRandom.intRanged(1, 4)) + ".png");
+				//brick.antialiasing = true;
+				brick.scale.x = brickWidth / 80;
+				brick.scale.y = brickHeight / 40;
+				if (FlxRandom.chanceRoll()) brick.scale.x *= -1; // add some variety
+				if (FlxRandom.chanceRoll()) brick.scale.y *= -1; // add some variety.
 				brick.setBodyMaterial(.5, .5, .5, 2);
-				brick.body.position.y = FlxG.height - brickHeight / 2 - brickHeight * i - 10;
-				brick.body.position.x = (FlxG.width / 2 - brickWidth / 2 * (levels - i - 1)) + brickWidth * j; 
+				brick.body.position.y = FlxG.height - brickHeight / 2 - brickHeight * i + 2;
+				brick.body.position.x = (FlxG.width / 2 - brickWidth / 2 * (Piramid.levels - i - 1)) + brickWidth * j; 
 				add(brick);
+				bricks.push(brick);
+				shooter.registerPhysSprite(brick);
 			}
 		}
 	}
@@ -77,6 +106,9 @@ class Piramid extends FlxPhysState
 	override public function update():Void 
 	{	
 		super.update();
+		
+		if (FlxG.mouse.justPressed() && FlxPhysState.space.gravity.y == 0)
+			FlxPhysState.space.gravity.setxy(0, 500);
 		
 		if (FlxG.keys.justPressed("G"))
 			if (_physDbgSpr != null)
@@ -91,6 +123,16 @@ class Piramid extends FlxPhysState
 			FlxPhysicsDemo.prevState();
 		if (FlxG.keys.justPressed("RIGHT"))
 			FlxPhysicsDemo.nextState();
+		if (FlxG.keys.justPressed("Q"))
+		{
+			Piramid.levels++;
+			FlxG.resetState();
+		}
+		if (FlxG.keys.justPressed("W"))
+		{
+			Piramid.levels--;
+			FlxG.resetState();
+		}
 	}
 	
 }

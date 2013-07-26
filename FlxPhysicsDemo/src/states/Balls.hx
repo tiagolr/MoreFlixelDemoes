@@ -36,21 +36,7 @@ class Balls extends FlxPhysState
 		
 		shooter = new Shooter();
 		add(shooter);
-		
-		FlxPhysState.space.listeners.add(new InteractionListener(CbEvent.BEGIN, 
-													 InteractionType.COLLISION, 
-													 Shooter.CB_BULLET,
-													 CbType.ANY_BODY,
-													 onBulletColides));
 											
-	}
-	
-	public function onBulletColides(clbk:InteractionCallback) 
-	{
-		if (shooter.getFirstAlive() != null) 
-		{
-			shooter.getFirstAlive().kill();
-		}
 	}
 	
 	private function createBalls() 

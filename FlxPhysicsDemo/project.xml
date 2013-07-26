@@ -3,7 +3,6 @@
 	
 	<app title="FlxPhysicsDemo" file="FlxPhysicsDemo" path="bin" main="Main" version="1.0.0" company="TiagoLr ( ~~~ProG4mr~~~)" />
 
-	<set name="SWF_VERSION" value="10.1" />
 	<window background="#000000" fps="60" />
 	<window width="640" height="480" unless="mobile" />
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
