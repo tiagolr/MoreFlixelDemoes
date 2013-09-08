@@ -1,6 +1,6 @@
 package states;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import flixel.util.FlxMath;
 import motion.Actuate;
 import motion.easing.Quad;
@@ -24,11 +24,11 @@ import openfl.Assets;
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class Explosions extends FlxPhysState
+class Explosions extends FlxNapeState
 {
 
 	private var shooter:Shooter;
-	public var buildingSprites:Array<FlxPhysSprite>;
+	public var buildingSprites:Array<FlxNapeSprite>;
 	
 	override public function create():Void 
 	{	
@@ -36,7 +36,7 @@ class Explosions extends FlxPhysState
 		FlxG.mouse.show();
 		
 		// Sets gravity.
-		FlxPhysState.space.gravity.setxy(0, 500);
+		FlxNapeState.space.gravity.setxy(0, 500);
 
 		//createWalls( -2000, 0, 1640, FlxG.height);
 		createWalls();
@@ -47,13 +47,13 @@ class Explosions extends FlxPhysState
 	
 	private function createBuildings() 
 	{
-		buildingSprites = new Array<FlxPhysSprite>();
+		buildingSprites = new Array<FlxNapeSprite>();
 		createBuilding(Assets.getBitmapData("assets/building1.png"), 40, 380);
 	}
 	
 	private function createBuilding(bitmapData:BitmapData, x:Int, y:Int) 
 	{
-		var spr:FlxPhysSprite;
+		var spr:FlxNapeSprite;
 		for (i in 0...bitmapData.width)
 		{
 			for (j in 0...bitmapData.height) 
@@ -61,7 +61,7 @@ class Explosions extends FlxPhysState
 				var color = bitmapData.getPixel32(i, j);
 				if ((color >>> 24) > 0) 
 				{
-					spr = new FlxPhysSprite(x + i * 10, y + j * 10);
+					spr = new FlxNapeSprite(x + i * 10, y + j * 10);
 					spr.makeGraphic(10, 10, color);
 					spr.createRectangularBody();
 					spr.setBodyMaterial(0.3);
@@ -76,18 +76,18 @@ class Explosions extends FlxPhysState
 	{	
 		super.update();
 		
-		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
-		if (FlxG.keys.justPressed("R"))
+		if (FlxG.keys.justPressed.G)
+			napeDebugEnabled = false;
+		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
 		
 					
-		if (FlxG.keys.justPressed("LEFT"))
+		if (FlxG.keys.justPressed.LEFT)
 			FlxPhysicsDemo.prevState();
-		if (FlxG.keys.justPressed("RIGHT"))
+		if (FlxG.keys.justPressed.RIGHT)
 			FlxPhysicsDemo.nextState();
 			
-		if (FlxG.mouse.justPressed()) 
+		if (FlxG.mouse.justPressed) 
 		{
 			
 			Actuate.timer(0.3).onComplete(startBulletTime);
@@ -133,7 +133,7 @@ class Explosion extends FlxSprite
 {
 	static public inline var EXP_FORCE:Int = 1500;
 	var parent:Explosions;
-	var buildingSprites:Array<FlxPhysSprite>;
+	var buildingSprites:Array<FlxNapeSprite>;
 	public var explosionFire:FlxSprite;
 	var trueX:Float;
 	var trueY:Float;

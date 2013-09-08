@@ -2,8 +2,8 @@ package states;
 import flixel.text.FlxText;
 import flixel.util.FlxRandom;
 import FlxPhysicsDemo;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -24,11 +24,11 @@ import openfl.display.FPS;
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class Piramid extends FlxPhysState
+class Piramid extends FlxNapeState
 {	
 	private var shooter:Shooter;
 	private static var levels;
-	var bricks:Array<FlxPhysSprite>;
+	var bricks:Array<FlxNapeSprite>;
 	var fps:FPS;
 	
 	override public function create():Void 
@@ -36,7 +36,7 @@ class Piramid extends FlxPhysState
 		super.create();
 		FlxG.mouse.show();
 		
-		disablePhysDebug();
+		napeDebugEnabled = false;
 		
 		add(new FlxSprite(0, 0, "assets/piramidbg.jpg"));
 
@@ -70,8 +70,8 @@ class Piramid extends FlxPhysState
 	
 	private function createBricks() 
 	{
-		bricks = new Array<FlxPhysSprite>();
-		var brick:FlxPhysSprite;
+		bricks = new Array<FlxNapeSprite>();
+		var brick:FlxNapeSprite;
 		
 		var brickHeight:Int = Std.int(8 * 40 / Piramid.levels); // magic number!
 		var brickWidth:Int = brickHeight * 2;
@@ -82,7 +82,7 @@ class Piramid extends FlxPhysState
 		{
 			for (j in 0...(Piramid.levels - i)) 
 			{
-				brick = new FlxPhysSprite();
+				brick = new FlxNapeSprite();
 				brick.makeGraphic(brickWidth, brickHeight, 0x0);
 				brick.createRectangularBody();
 				brick.loadGraphic("assets/brick" + Std.string(FlxRandom.intRanged(1, 4)) + ".png");
@@ -107,28 +107,28 @@ class Piramid extends FlxPhysState
 	{	
 		super.update();
 		
-		if (FlxG.mouse.justPressed() && FlxPhysState.space.gravity.y == 0)
-			FlxPhysState.space.gravity.setxy(0, 500);
+		if (FlxG.mouse.justPressed && FlxNapeState.space.gravity.y == 0)
+			FlxNapeState.space.gravity.setxy(0, 500);
 		
-		if (FlxG.keys.justPressed("G"))
+		if (FlxG.keys.justPressed.G)
 			if (_physDbgSpr != null)
-				disablePhysDebug(); // PhysState method to remove the debug graphics.
+				napeDebugEnabled = false;
 			else
-				enablePhysDebug();
+				napeDebugEnabled = true;
 			
-		if (FlxG.keys.justPressed("R"))
+		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
 			
-		if (FlxG.keys.justPressed("LEFT"))
+		if (FlxG.keys.justPressed.LEFT)
 			FlxPhysicsDemo.prevState();
-		if (FlxG.keys.justPressed("RIGHT"))
+		if (FlxG.keys.justPressed.RIGHT)
 			FlxPhysicsDemo.nextState();
-		if (FlxG.keys.justPressed("Q"))
+		if (FlxG.keys.justPressed.Q)
 		{
 			Piramid.levels++;
 			FlxG.resetState();
 		}
-		if (FlxG.keys.justPressed("W"))
+		if (FlxG.keys.justPressed.W)
 		{
 			Piramid.levels--;
 			FlxG.resetState();

@@ -1,6 +1,6 @@
 package states;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -16,7 +16,7 @@ import flixel.FlxG;
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class Balls extends FlxPhysState
+class Balls extends FlxNapeState
 {
 
 	private var shooter:Shooter;
@@ -27,9 +27,9 @@ class Balls extends FlxPhysState
 		FlxG.mouse.show();
 		
 		// Sets gravity.
-		FlxPhysState.space.gravity.setxy(0, 1500);
-		//FlxPhysState.space.worldLinearDrag = 0;
-		//FlxPhysState.space.worldAngularDrag = 0;
+		FlxNapeState.space.gravity.setxy(0, 1500);
+		//FlxNapeState.space.worldLinearDrag = 0;
+		//FlxNapeState.space.worldAngularDrag = 0;
 
 		createWalls( -2000, -2000, 1640, 480);
 		createBalls();
@@ -41,7 +41,7 @@ class Balls extends FlxPhysState
 	
 	private function createBalls() 
 	{
-		var ball:FlxPhysSprite;
+		var ball:FlxNapeSprite;
 		var constraint:DistanceJoint;
 		var constraint2:PivotJoint;
 		var numBalls = 6;
@@ -49,7 +49,7 @@ class Balls extends FlxPhysState
 		
 		for (i in 0...numBalls)
 		{
-			ball = new FlxPhysSprite();
+			ball = new FlxNapeSprite();
 			ball.makeGraphic(2, 2, 0x0);
 			ball.createCircularBody(radius);				
 			ball.setBodyMaterial(1, 0, 0, 10);
@@ -57,16 +57,16 @@ class Balls extends FlxPhysState
 			ball.body.position.x = (FlxG.width / 2 - radius * (numBalls - i - 1)) + (radius + 3) * i; 
 			add(ball);
 			
-			constraint = new DistanceJoint(FlxPhysState.space.world, ball.body, new Vec2(ball.body.position.x , 100), new Vec2(0, -radius), 0, 250);
-			constraint.space = FlxPhysState.space;
+			constraint = new DistanceJoint(FlxNapeState.space.world, ball.body, new Vec2(ball.body.position.x , 100), new Vec2(0, -radius), 0, 250);
+			constraint.space = FlxNapeState.space;
 			
 			if (i != 0 && i != numBalls - 1) 
 			{
-				constraint2 = new PivotJoint(FlxPhysState.space.world, ball.body, new Vec2(ball.body.position.x , ball.body.position.y + radius), new Vec2(0, 0));
+				constraint2 = new PivotJoint(FlxNapeState.space.world, ball.body, new Vec2(ball.body.position.x , ball.body.position.y + radius), new Vec2(0, 0));
 				constraint2.stiff = false;
 				constraint2.maxForce = 250;
 				constraint2.damping = 100;
-				constraint2.space = FlxPhysState.space;
+				constraint2.space = FlxNapeState.space;
 			}
 			
 			
@@ -85,14 +85,14 @@ class Balls extends FlxPhysState
 	{	
 		super.update();
 		
-		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
-		if (FlxG.keys.justPressed("R"))
+		if (FlxG.keys.justPressed.G)
+			napeDebugEnabled = false;
+		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
 			
-		if (FlxG.keys.justPressed("LEFT"))
+		if (FlxG.keys.justPressed.LEFT)
 			FlxPhysicsDemo.prevState();
-		if (FlxG.keys.justPressed("RIGHT"))
+		if (FlxG.keys.justPressed.RIGHT)
 			FlxPhysicsDemo.nextState();
 	}
 	

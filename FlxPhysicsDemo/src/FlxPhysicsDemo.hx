@@ -1,9 +1,9 @@
 package ;
 import flash.Lib;
-import flixel.addons.nape.FlxPhysSprite;
+import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxG;
 import flixel.FlxGame;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeState;
 import states.Balls;
 import states.Explosions;
 import states.Piramid;
@@ -35,10 +35,11 @@ class FlxPhysicsDemo extends FlxGame
 		var ratio:Float = Math.min(ratioX, ratioY);
 		
 		#if (flash || desktop || neko)
-		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Piramid, ratio, 60, 60);
+		super(Math.floor(stageWidth / ratio) , Math.floor(stageHeight / ratio), Blob, ratio, 60, 60);
 		#else
-		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Piramid, ratio, 60, 30);
+		super(Math.floor(stageWidth / ratio), Math.floor(stageHeight / ratio), Blob, ratio, 60, 30);
 		#end
+		
 	}
 	
 	public static function nextState()

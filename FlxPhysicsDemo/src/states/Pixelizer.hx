@@ -1,6 +1,6 @@
 package states;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -14,7 +14,7 @@ import openfl.Assets;
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class Pixelizer extends FlxPhysState 
+class Pixelizer extends FlxNapeState 
 {
 
 	private var shooter:Shooter;
@@ -25,7 +25,7 @@ class Pixelizer extends FlxPhysState
 		FlxG.mouse.show();
 		
 		// Sets gravity.
-		//FlxPhysState.space.gravity.setxy(0, 1500);
+		//FlxNapeState.space.gravity.setxy(0, 1500);
 
 		createWalls( -2000, -2000, 1640, 480);
 		createPixels();
@@ -43,7 +43,7 @@ class Pixelizer extends FlxPhysState
 		{
 			for (y in 0...30)
 			{
-				var spr:FlxPhysSprite = new FlxPhysSprite(x * 4, y * 4);
+				var spr:FlxNapeSprite = new FlxNapeSprite(x * 4, y * 4);
 				spr.makeGraphic(4, 4, 0xFFFFFFFF);
 				spr.createRectangularBody();
 				add(spr);
@@ -55,8 +55,8 @@ class Pixelizer extends FlxPhysState
 	{	
 		super.update();
 		
-		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
+		if (FlxG.keys.justPressed.G)
+			napeDebugEnabled = false;
 	}
 	
 }

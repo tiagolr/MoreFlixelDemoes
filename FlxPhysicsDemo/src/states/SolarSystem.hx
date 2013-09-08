@@ -1,6 +1,6 @@
 package states;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
@@ -17,24 +17,24 @@ import flixel.util.FlxAngle;
  * @author TiagoLr ( ~~~ProG4mr~~~ )
  */
 
-class SolarSystem extends FlxPhysState
+class SolarSystem extends FlxNapeState
 {
 
 	private var shooter:Shooter;
-	private var planets:Array<FlxPhysSprite>;
+	private var planets:Array<FlxNapeSprite>;
 	private static var halfWidth:Int = Std.int(FlxG.width / 2);
 	private static var halfHeight:Int = Std.int(FlxG.height / 2);
 	private static var gravity:Int = Std.int(5e4);
-	private var sun:FlxPhysSprite;
+	private var sun:FlxNapeSprite;
 	
 	override public function create():Void 
 	{	
 		super.create();
 		FlxG.mouse.show();
 		
-		FlxPhysState.space.worldAngularDrag = 0;
-		FlxPhysState.space.worldLinearDrag = 0;
-		FlxPhysState.space.gravity = new Vec2(0, 0);
+		FlxNapeState.space.worldAngularDrag = 0;
+		FlxNapeState.space.worldLinearDrag = 0;
+		FlxNapeState.space.gravity = new Vec2(0, 0);
 
 		createWalls();
 		
@@ -48,41 +48,41 @@ class SolarSystem extends FlxPhysState
 	
 	private function createSolarSystem() 
 	{
-		planets = new Array<FlxPhysSprite>();
+		planets = new Array<FlxNapeSprite>();
 		
-		var planet:FlxPhysSprite;
+		var planet:FlxNapeSprite;
 		
 		
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 70);
+		planet = new FlxNapeSprite(halfWidth, halfHeight + 70);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(5);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 100);
+		planet = new FlxNapeSprite(halfWidth, halfHeight + 100);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(10);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 150);
+		planet = new FlxNapeSprite(halfWidth, halfHeight + 150);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(15);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		planet = new FlxPhysSprite(halfWidth, halfHeight + 200);
+		planet = new FlxNapeSprite(halfWidth, halfHeight + 200);
 		planet.setBodyMaterial(1, 0, 0, 10, 0);
 		planet.createCircularBody(9);
 		planets.push(planet);
 		planet.body.applyImpulse(new Vec2(220 * planet.body.mass, 0));
 		add(planet);
 		
-		sun = new FlxPhysSprite(halfWidth, halfHeight);
+		sun = new FlxNapeSprite(halfWidth, halfHeight);
 		sun.createCircularBody(20);
 		sun.setBodyMaterial(0, 0, 0, 100);
 		sun.body.type = BodyType.STATIC;
@@ -93,9 +93,9 @@ class SolarSystem extends FlxPhysState
 	{	
 		super.update();
 		
-		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
-		if (FlxG.keys.justPressed("R"))
+		if (FlxG.keys.justPressed.G)
+			napeDebugEnabled = false;
+		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
 			
 		for (planet in planets)
@@ -110,22 +110,22 @@ class SolarSystem extends FlxPhysState
 			
 		}
 		
-		if (FlxG.keys.justPressed("W"))
+		if (FlxG.keys.justPressed.W)
 			planets[0].body.applyImpulse(new Vec2(0, -10));
 			
-		if (FlxG.keys.justPressed("A"))
+		if (FlxG.keys.justPressed.A)
 			planets[0].body.applyImpulse(new Vec2(-10, 0));
 			
-		if (FlxG.keys.justPressed("S"))
+		if (FlxG.keys.justPressed.S)
 			planets[0].body.applyImpulse(new Vec2(0, 10));
 			
-		if (FlxG.keys.justPressed("D"))
+		if (FlxG.keys.justPressed.D)
 			planets[0].body.applyImpulse(new Vec2(10, 0));
 			
 		
-		if (FlxG.keys.justPressed("LEFT"))
+		if (FlxG.keys.justPressed.LEFT)
 			FlxPhysicsDemo.prevState();
-		if (FlxG.keys.justPressed("RIGHT"))
+		if (FlxG.keys.justPressed.RIGHT)
 			FlxPhysicsDemo.nextState();
 		
 		

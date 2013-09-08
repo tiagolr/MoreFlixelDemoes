@@ -1,13 +1,15 @@
 package states;
+import flash.display.Graphics;
 import flash.display.Sprite;
 import flash.geom.Rectangle;
-import flixel.addons.nape.FlxPhysSprite;
-import flixel.addons.nape.FlxPhysState;
+import flixel.addons.nape.FlxNapeSprite;
+import flixel.addons.nape.FlxNapeState;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.util.FlxAngle;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
 import flixel.util.FlxSpriteUtil;
 import flixel.group.FlxGroup;
 import nape.callbacks.CbEvent;
@@ -15,6 +17,7 @@ import nape.callbacks.CbType;
 import nape.callbacks.InteractionCallback;
 import nape.callbacks.InteractionListener;
 import nape.callbacks.InteractionType;
+import nape.constraint.DistanceJoint;
 import nape.constraint.WeldJoint;
 import nape.dynamics.InteractionFilter;
 import nape.geom.Vec2;
@@ -27,56 +30,54 @@ import nape.shape.Circle;
  * ...
  * @author TiagoLr (~~~ ProG4mr ~~~)
  */
-class Blob extends FlxPhysState
+class Blob extends FlxNapeState
 {
-	private static var CIRCLE_RADIUS = 20;
-	private static var NUM_CIRCLES = 15;
-	private static var BLOB_RADIUS = 50;
-	private static var BLOB_COLOR = 0xFF;
+	static var CIRCLE_RADIUS = 20;
+	static var NUM_CIRCLES = 15;
+	static var BLOB_RADIUS = 50;
+	static var BLOB_COLOR = 0x00824A;
+	static var OUTLINE_COLOR = 0x00f58f;
+	static var NUM_TWINKLES = 7;
 	
 	static var CB_IGNOREME:CbType = new CbType();
 	
 	var shooter:Shooter;
-	var listBlobCircles:Array<Body>;
-	var blob:FlxSprite; // FlxSprite that copies blob graphics.
+	var listBlobCircles:Array<FlxNapeSprite>;
+	var blob:FlxSprite; // FlxSprite that displays blob graphics.
 	var leftEye:Eye;
 	var rightEye:Eye;
 	var startYOffset:Float = -250;
-	var startXOffset:Float = 150;
+	var startXOffset:Float;
 	
 	override public function create():Void 
 	{
 		super.create();
 		FlxG.mouse.show();
 		
-		createWalls(0,-500,0,0,10, new Material(1,1, 2,1,0.001));
-		createBlob();
-		FlxPhysState.space.gravity.setxy(0, 500);
+		add(new FlxSprite(0, 0, "assets/BlobBground.jpg"));
+		
+		startXOffset = Math.random() * 200 * FlxRandom.sign();
+		
+		
+		createWalls(0,-1000,0,0,10, new Material(1,1, 2,1,0.001));
+		FlxNapeState.space.gravity.setxy(0, 500);
+
 		shooter = new Shooter();
-		add(shooter);
-																 
+		shooter.disableShooting = true;
+		add(shooter);														 
 		
+		napeDebugEnabled = false;
+		createBlob();
 		
-		// ~~~~ Creates static objects on the map.
-		var physSpr:FlxPhysSprite = new FlxPhysSprite(FlxG.width / 2 + 20 + startXOffset, FlxG.height / 2 - 60);
-		physSpr.createCircularBody(50);
-		physSpr.body.setShapeFilters(new InteractionFilter(256, ~256)); 
-		physSpr.body.type = BodyType.STATIC;
-		add(physSpr);
+		for (i in 0...NUM_TWINKLES)
+		{
+			var t:Twinkle = new Twinkle();
+			add(t);
+			shooter.registerPhysSprite(t);
+			
+		}
 		
-		physSpr = new FlxPhysSprite(FlxG.width / 2 - 255 + startXOffset, FlxG.height / 2);
-		physSpr.createCircularBody(40);
-		physSpr.body.setShapeFilters(new InteractionFilter(256, ~256)); 
-		physSpr.body.type = BodyType.STATIC;
-		add(physSpr);
-		
-		physSpr = new FlxPhysSprite(FlxG.width / 2 - 135 + startXOffset, FlxG.height / 2 + 65);
-		physSpr.createCircularBody(20);
-		physSpr.body.setShapeFilters(new InteractionFilter(256, ~256)); 
-		physSpr.body.type = BodyType.STATIC;
-		add(physSpr);
-		
-		// ~~~~ end
+		add(new FlxSprite(0, 0, "assets/BlobFground.png"));
 	}
 	
 	override public function destroy():Void 
@@ -87,7 +88,7 @@ class Blob extends FlxPhysState
 	
 	function createBlob() 
 	{
-		listBlobCircles = new Array<Body>();
+		listBlobCircles = new Array<FlxNapeSprite>();
 		
 		var i:Int = 0;
 		
@@ -95,21 +96,26 @@ class Blob extends FlxPhysState
 		while (i < 360) 
 		{
 			var angle = FlxAngle.asRadians(i);
-			var circle:Body = new Body(BodyType.DYNAMIC, new Vec2(FlxG.width / 2 + Math.cos(angle) * BLOB_RADIUS + startXOffset, FlxG.height / 2 + Math.sin(angle) * BLOB_RADIUS + startYOffset));
-			circle.shapes.add(new Circle(CIRCLE_RADIUS));
-			circle.setShapeMaterials(new Material(1, 0.1, 2, 1, 0.001));
-			circle.space = FlxPhysState.space;
+			var circle:FlxNapeSprite = new FlxNapeSprite(FlxG.width / 2 + Math.cos(angle) * BLOB_RADIUS + startXOffset, FlxG.height / 2 + Math.sin(angle) * BLOB_RADIUS + startYOffset);
+			circle.createCircularBody(CIRCLE_RADIUS);
+			circle.body.allowRotation = false;
+			circle.setBodyMaterial(1, 0.1, 2, 1, 0.001);
+			circle.makeGraphic(CIRCLE_RADIUS * 2, CIRCLE_RADIUS * 2, 0xFFFFFFFF); // Creates the dummie circle graphic used to add mouse events to this NapeSprite. 
+			circle.alpha = 0.01;
 			listBlobCircles.push(circle);
+			add(circle);
+			
+			shooter.registerPhysSprite(circle);
 			
 			i += Std.int(360 / NUM_CIRCLES);
 		}
-		// Attatch the bodies using constrains.
+		// Connect circle boddies using distance joints to create soft body.
 		var b1:Body = null;
 		var b2:Body = null;
 		for (circle in listBlobCircles)
 		{
 			b2 = b1;
-			b1 = circle;
+			b1 = circle.body;
 			
 			
 			var filter = new InteractionFilter(2, ~2);
@@ -117,7 +123,7 @@ class Blob extends FlxPhysState
 			
 			if (b2 == null) 
 			{
-				b2 = listBlobCircles[listBlobCircles.length - 1];// first element will link to last one.
+				b2 = listBlobCircles[listBlobCircles.length - 1].body;// first element will link to last one.
 			}
 			
 			var median = new Vec2(b1.position.x + (b2.position.x - b1.position.x) / 2, b1.position.y + (b2.position.y - b1.position.y) / 2);
@@ -129,7 +135,7 @@ class Blob extends FlxPhysState
 			//constrain.damping = 1;
 			constrain.frequency = 7;
 			constrain.stiff = false;
-			constrain.space = FlxPhysState.space;
+			constrain.space = FlxNapeState.space;
 			
 			
 		}
@@ -148,38 +154,53 @@ class Blob extends FlxPhysState
 	{
 		super.update();
 		
-		// Draws blob
-		FlxSpriteUtil.flashGfxSprite.graphics.clear();
-		FlxSpriteUtil.flashGfxSprite.graphics.beginFill(BLOB_COLOR, 1);
-		FlxSpriteUtil.flashGfxSprite.graphics.lineStyle(CIRCLE_RADIUS * 2, BLOB_COLOR, 1);
+		//###### Draws blob outline
+		var gfx:Graphics = FlxSpriteUtil.flashGfxSprite.graphics;
+		gfx.clear();
+		//gfx.beginFill(BLOB_COLOR, 1);
+		gfx.lineStyle(CIRCLE_RADIUS * 2, OUTLINE_COLOR, 1);
 		
 		var b:Body;
-		b = listBlobCircles[listBlobCircles.length - 1];
-		FlxSpriteUtil.flashGfxSprite.graphics.moveTo(b.position.x, b.position.y);
-		b = listBlobCircles[0];
-		FlxSpriteUtil.flashGfxSprite.graphics.lineTo(b.position.x, b.position.y);
+		b = listBlobCircles[listBlobCircles.length - 1].body;
+		gfx.moveTo(b.position.x, b.position.y);
+		b = listBlobCircles[0].body;
+		gfx.lineTo(b.position.x, b.position.y);
 		
 		for (i in 1...listBlobCircles.length)
 		{
-			b = listBlobCircles[i];
-			FlxSpriteUtil.flashGfxSprite.graphics.lineTo(b.position.x, b.position.y);
+			b = listBlobCircles[i].body;
+			gfx.lineTo(b.position.x, b.position.y);
 		}
 		
-		FlxSpriteUtil.flashGfxSprite.graphics.endFill();
-		//
+		gfx.beginFill(BLOB_COLOR, 1);
+		gfx.lineStyle(CIRCLE_RADIUS * 2 - 2, BLOB_COLOR, 1);
 		
-		// Copies blob graphic to flxSprite.
+		b = listBlobCircles[listBlobCircles.length - 1].body;
+		gfx.moveTo(b.position.x, b.position.y);
+		b = listBlobCircles[0].body;
+		gfx.lineTo(b.position.x, b.position.y);
+		
+		for (i in 1...listBlobCircles.length)
+		{
+			b = listBlobCircles[i].body;
+			gfx.lineTo(b.position.x, b.position.y);
+		}
+		
+		gfx.endFill();
+		//######
+		
+		// Copies generated graphics to blob sprite.
 		blob.pixels.fillRect(new Rectangle(0, 0, 640, 480), 0x0);
 		FlxSpriteUtil.updateSpriteGraphic(blob);
 		// ~
 		
-		if (FlxG.keys.justPressed("G"))
-			disablePhysDebug(); // PhysState method to remove the debug graphics.
-		if (FlxG.keys.justPressed("R"))
+		if (FlxG.keys.justPressed.G)
+			napeDebugEnabled = !napeDebugEnabled;
+		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
-		if (FlxG.keys.justPressed("LEFT")) 
+		if (FlxG.keys.justPressed.LEFT) 
 			FlxPhysicsDemo.prevState();
-		if (FlxG.keys.justPressed("RIGHT"))
+		if (FlxG.keys.justPressed.RIGHT)
 			FlxPhysicsDemo.nextState();
 			
 		
@@ -190,7 +211,7 @@ class Blob extends FlxPhysState
 		
 		for (i in 1...5)
 		{
-			body = listBlobCircles[Std.int(i * NUM_CIRCLES / 4) - 1];
+			body = listBlobCircles[Std.int(i * NUM_CIRCLES / 4) - 1].body;
 			medX += body.position.x; 
 			medY += body.position.y;
 		}
@@ -258,4 +279,74 @@ class Eye extends FlxGroup
 		innerEye.y = Math.floor(y + distance.y);
 		
 	}
+}
+
+class Twinkle extends FlxNapeSprite
+{
+	
+	var destinationTimer:Float			= 0;
+	var radius:Float;
+	var destinationJoint:DistanceJoint;
+	
+	function new()
+	{
+		var rand = FlxRandom.intRanged(0, 4);
+		var graphic:String = null;
+		
+		
+		switch (rand)
+		{
+			case 0: graphic = "assets/Twinkle10Y.png"; radius = 10;
+			case 1: graphic = "assets/Twinkle3Y.png"; radius = 3;
+			case 2: graphic = "assets/Twinkle4B.png"; radius = 4;
+			case 3: graphic = "assets/Twinkle5B.png"; radius = 5;
+			case 4: graphic = "assets/Twinkle5Y.png"; radius = 5;
+		}
+		
+		super(Math.random() * 540 + 50 , Math.random() * 280 + 200, graphic);
+		body.allowRotation = false;
+		//radius = Math.random() * 10 + 6;
+		
+		createCircularBody(radius);
+		
+		setBodyMaterial(1, 0.2, 0.4, 250); 		// set stupid high density to be less afected by blob weight.
+		body.gravMass = 0; 						// cancels gravity for this object.
+		
+		destinationJoint = new DistanceJoint(FlxNapeState.space.world, body, new Vec2(body.position.x, body.position.y),
+								body.localCOM, 0, 0);
+		
+		//constrain.active = false; <- default is true
+		destinationJoint.stiff = false;  
+		//destinationJoint.damping = 0;
+		destinationJoint.frequency = .22 + radius * 2 / 100;
+		
+		 destinationJoint.anchor1 = new Vec2(body.position.x, body.position.y);
+		 destinationJoint.space = FlxNapeState.space;		 
+
+	}
+	
+	override public function update():Void 
+	{
+		super.update();
+		
+		if (destinationTimer <= 0)
+		{
+			destinationTimer = Math.random() * 4 + .6;
+			
+			var newX = body.position.x + Math.random() * 100 * FlxRandom.sign();
+			var newY = body.position.y + Math.random() * 100 * FlxRandom.sign();
+			
+			if (newX > 640 - 50) newX = 640 - 50;
+			if (newX < 50) newX = 50;
+			
+			if (newY > 480 - 100) newY = 480 - 100;
+			if (newY < 100) newY = 100;
+			
+			destinationJoint.anchor1 = new Vec2(newX, newY);
+		}
+		
+		destinationTimer -= FlxG.elapsed;
+	}
+
+	
 }
