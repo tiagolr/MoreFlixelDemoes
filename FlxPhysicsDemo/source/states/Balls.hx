@@ -78,7 +78,6 @@ class Balls extends FlxNapeState
 			
 		}
 		
-		
 	}
 	
 	override public function update():Void 

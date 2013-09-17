@@ -8,14 +8,13 @@
 	<window orientation="landscape" vsync="true" antialiasing="0" if="cpp" />
 	
 	<!-- classpath, haxe libs -->
-	<source path="src" />
+	<source path="source" />
 	<haxelib name="openfl" />
 	<haxelib name="flixel"/>
 	<haxelib name="flixel-addons"/>
 	<haxelib name="nape"/>
 	<haxelib name="hxcpp"/>
 	<haxelib name="actuate"/>
-	<haxelib name="gconsole"/>
 	
 	<!-- assets -->
 	<icon path="assets/nme.svg" />

@@ -6,6 +6,7 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxGroup;
 import flixel.plugin.MouseEventManager;
+import flixel.text.FlxText;
 import flixel.util.FlxPoint;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
@@ -24,8 +25,8 @@ import nape.dynamics.InteractionGroup;
 import nape.geom.Vec2;
 
 /**
- * ...
  * @author TiagoLr (~~~ ProG4mr ~~~)
+ * @link https://github.com/ProG4mr
  */
 class Fight extends FlxNapeState
 {
@@ -86,6 +87,12 @@ class Fight extends FlxNapeState
 		vegeta.lLArm.body.applyImpulse(new Vec2(-2000, -3000+ Math.random() * -100 + 200));
 		//vegeta.lUArm.body.applyImpulse(new Vec2(-1500, -2000));
 													 
+		
+		var txt:FlxText;
+		txt = new FlxText( -10, 5, 640, "      'R' - reset state, 'G' - toggle physics graphics");
+		add(txt);
+		txt = new FlxText( -10, 20, 640, "      'LEFT' & 'RIGHT' - switch demo");
+		add(txt);
 	}
 	
 	override public function update():Void 
@@ -93,8 +100,7 @@ class Fight extends FlxNapeState
 		super.update();
 		
 		if (FlxG.keys.justPressed.G)
-			if (_physDbgSpr != null)
-				napeDebugEnabled = !napeDebugEnabled;
+			napeDebugEnabled = !napeDebugEnabled;
 			
 		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();

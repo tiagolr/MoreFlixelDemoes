@@ -6,8 +6,13 @@ import flixel.addons.nape.FlxNapeSprite;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.plugin.MouseEventManager;
+import flixel.system.layer.frames.FlxFrame;
+import flixel.text.FlxText;
 import flixel.util.FlxAngle;
+import flixel.util.FlxColor;
+import flixel.util.FlxColorUtil;
 import flixel.util.FlxMath;
+import flixel.util.FlxRandom;
 import flixel.util.FlxSpriteUtil;
 import nape.callbacks.CbEvent;
 import nape.callbacks.CbType;
@@ -17,6 +22,7 @@ import nape.callbacks.InteractionType;
 import nape.constraint.DistanceJoint;
 import nape.geom.Vec2;
 import nape.phys.Body;
+import nape.phys.BodyType;
 import nape.phys.Material;
 import nape.shape.Circle;
 import nape.shape.Shape;
@@ -24,18 +30,20 @@ import nape.shape.Shape;
 /**
  * ...
  * @author TiagoLr (~~~ ProG4mr ~~~)
+ * @link https://github.com/ProG4mr
  */
 class Balloons extends FlxNapeState
 {
 	private inline static var WIRE_MAX_LENGTH = 200;
 	private inline static var NUM_BALLOONS = 7;
+	private inline static var NUM_SEGMENTS = 10;
 	public static var CB_BALLOON:CbType = new CbType();
 	
 	
 	var listBalloons:Array<Balloon>;
 	private var shooter:Shooter;
 	var wiresSprite:FlxSprite; // Sprite that shows the wires graphics.
-	var wires:Array<DistanceJoint>;
+	var wires:Array<Wire>;
 	var box:FlxNapeSprite;
 	
 	
@@ -45,10 +53,14 @@ class Balloons extends FlxNapeState
 		super.create();
 		FlxG.mouse.show();
 		
+		add(new FlxSprite(0, 0, "assets/BalloonsBground.jpg"));
+		
 		// Sets gravity.
 		FlxNapeState.space.gravity.setxy(0, 500);
+		napeDebugEnabled = false;
 
 		createWalls();
+		
 		createBalloons();
 		createBox();
 		createWires();
@@ -68,6 +80,11 @@ class Balloons extends FlxNapeState
 		for (b in listBalloons)
 			shooter.registerPhysSprite(b);
 	
+		var txt:FlxText;
+		txt = new FlxText( -10, 5, 640, "      'R' - reset state, 'G' - toggle physics graphics");
+		add(txt);
+		txt = new FlxText( -10, 20, 640, "      'LEFT' & 'RIGHT' - switch demo");
+		add(txt);
 	}
 	
 	function onBulletColides(i:InteractionCallback) 
@@ -79,6 +96,10 @@ class Balloons extends FlxNapeState
 	
 	function createBalloons() 
 	{
+		wiresSprite = new FlxSprite();
+		wiresSprite.makeGraphic(640, 480, 0x0);
+		add(wiresSprite);
+		
 		listBalloons = new Array<Balloon>();
 		for (i in 0...NUM_BALLOONS)
 		{
@@ -90,31 +111,27 @@ class Balloons extends FlxNapeState
 	
 	function createBox() 
 	{
-		box = new FlxNapeSprite(FlxG.width * 0.5, 400);
-		box.createRectangularBody(40, 40);
+		box = new FlxNapeSprite(FlxG.width * 0.5 - 27, 480 - 27, "assets/box.png");
+		box.antialiasing = true;
+		box.setBodyMaterial(1, .2, .4, .5);
 		add(box);
 	}
 	
 	// Wires are distance joints between balloons and box.
 	function createWires()
 	{
-		wires = new Array<DistanceJoint>();
+		wires = new Array<Wire>();
+		
 		for (b in listBalloons)
 		{
-			
-			var yOffsetBox:Vec2 = new Vec2(0, -20);
+			var yOffsetBox:Vec2 = new Vec2(0, -25);
 			var yOffsetB:Vec2 = new Vec2(0, 25);
 		
-			var constrain:DistanceJoint = new DistanceJoint(box.body, b.body, yOffsetBox.add(box.body.localCOM), yOffsetB.add(b.body.localCOM), 0, WIRE_MAX_LENGTH);
-			constrain.space = FlxNapeState.space;
-			constrain.stiff = false;
-			constrain.frequency = 5;
-			wires.push(constrain);
+			var wire:Wire = new Wire(box.body, b.body, yOffsetBox.add(box.body.localCOM), yOffsetB.add(b.body.localCOM), WIRE_MAX_LENGTH, NUM_SEGMENTS);
+			wires.push(wire);
+			
 		}
 		
-		wiresSprite = new FlxSprite();
-		wiresSprite.makeGraphic(640, 480, 0x0);
-		add(wiresSprite);
 	}
 	
 	override public function update():Void 
@@ -126,56 +143,25 @@ class Balloons extends FlxNapeState
 			b.body.applyImpulse(new Vec2(0, -25));
 		}
 		
-		// Draw wires using bezier curves.
-		var gfx:Graphics = FlxSpriteUtil.flashGfxSprite.graphics;
-		gfx.clear();
-		gfx.lineStyle(1, 0xFFFFFF);
-		
 		for (wire in wires)
 		{
-			
-			var boxAngle:Float = wire.body1.rotation + 90 * FlxAngle.TO_RAD;			
-			var balloonAngle:Float = wire.body2.rotation + 90 * FlxAngle.TO_RAD;
-			
-			// Real position of the box and ballon where the join is attached.
-			var posBox:Vec2 = new Vec2(wire.body1.position.x + wire.anchor1.y * Math.cos(boxAngle), wire.body1.position.y + wire.anchor1.y * Math.sin(boxAngle));
-			var posBalloon:Vec2 = new Vec2(wire.body2.position.x + wire.anchor2.y * Math.cos(balloonAngle), wire.body2.position.y + wire.anchor2.y * Math.sin(balloonAngle));
-			
-			var medX = (posBox.x + posBalloon.x) / 2;			// X and Y Median points.
-			var medY = (posBox.y + posBalloon.y) / 2;			// X and Y Median points.
-			
-			// yOffset represents how much the bezier curve control point is pulled downward simulating gravity.
-			var yOffset = WIRE_MAX_LENGTH - Vec2.distance(posBox, posBalloon);		
-			
-			if (yOffset < 0) 
-				yOffset = 0;
-		
-			// Caps the control point max y.
-			if (posBalloon.y + yOffset > 480 + 20) 		
-				yOffset = 480 + 20 - posBalloon.y; 	
-				
-			
-				
-			// Draws the curve
-			gfx.moveTo(posBox.x, posBox.y);
-			gfx.curveTo(medX, medY + yOffset, posBalloon.x, posBalloon.y);
-			
-			// Control point debug graphics:
-			//gfx.lineStyle(1, 0xFF0000);
-			//gfx.lineTo(medX, medY + yOffset);
-			
+			wire.draw();
 		}
-		//~
+
+		var gfx:Graphics = FlxSpriteUtil.flashGfxSprite.graphics;
+		gfx.clear();
+		for (wire in wires)
+		{
+			wire.draw();
+		}
 		
 		// Copies generated graphics to flxSprite.
 		wiresSprite.pixels.fillRect(new Rectangle(0, 0, 640, 480), 0x0);
 		FlxSpriteUtil.updateSpriteGraphic(wiresSprite);
-		//~
 		
 		// Input handling
 		if (FlxG.keys.justPressed.G)
-			if (_physDbgSpr != null)
-				napeDebugEnabled = !napeDebugEnabled;
+			napeDebugEnabled = !napeDebugEnabled;
 			
 		if (FlxG.keys.justPressed.R)
 			FlxG.resetState();
@@ -198,12 +184,83 @@ class Balloons extends FlxNapeState
 	
 }
 
+// Set of connected bodies to form a rope.
+class Wire
+{
+	
+	public var joints:Array<DistanceJoint>; 		// Used to draw the wire.
+	
+	public function new(body1:Body, body2:Body, anchor1:Vec2, anchor2:Vec2, maxDist:Float, segments:Int)
+	{	
+		joints = new Array<DistanceJoint>();
+		
+		var circle:Body;
+		var startPos:Vec2;
+		var distX:Float;
+		var distY:Float;
+		var distJoint:DistanceJoint;
+		
+		if (segments < 2) segments = 2;
+		if (maxDist < 10) maxDist = 10;
+		
+		distX = body2.position.x - body1.position.x;
+		distY = body2.position.y - body2.position.y;
+		
+		for (i in 1...segments)
+		{
+			startPos = new Vec2(body1.position.x + distX / (i + 1), body1.position.y + distY / (i + 1)); 		// defines starting position.
+			
+			circle = new Body(BodyType.DYNAMIC, startPos);
+			circle.shapes.add(new Circle(5));
+			circle.space = FlxNapeState.space;
+			circle.shapes.at(0).filter.collisionGroup = 2; 					// Belongs to group 2.
+			circle.shapes.at(0).filter.collisionMask = ~2; 					// Ignores group 2.
+			
+			distJoint = new DistanceJoint(body1, circle, anchor1, circle.localCOM, 0, maxDist / segments);
+			distJoint.frequency = 5;
+			distJoint.space = FlxNapeState.space;
+			
+			body1 = circle;
+			anchor1 = body1.localCOM;
+			joints.push(distJoint);
+		}
+		
+		distJoint = new DistanceJoint(body1, body2, body1.localCOM, anchor2, 0, maxDist / segments); 		// body1 is the last circle at this point
+		distJoint.frequency = 5;
+		distJoint.space = FlxNapeState.space;
+		joints.push(distJoint);
+		
+	}
+	
+	public function draw()
+	{
+		var from:Vec2;
+		var to:Vec2;
+		var gfx:Graphics = FlxSpriteUtil.flashGfxSprite.graphics;
+		gfx.lineStyle(1, 0x0);
+		
+		
+		for (joint in joints)
+		{
+			from = joint.body1.localPointToWorld(joint.anchor1);
+			to = joint.body2.localPointToWorld(joint.anchor2);
+			gfx.moveTo(from.x, from.y); 
+			gfx.lineTo(to.x, to.y);
+		}
+		
+	}
+}
 
 class Balloon extends FlxNapeSprite
 {
 	public function new(X:Int, Y:Int)
 	{
 		super(X, Y);
+		loadGraphic("assets/Balloon.png", true, false, 68, 68);
+		
+		this.animation.frameIndex = FlxRandom.intRanged(0, 6);
+		
+		antialiasing = true;
 		createCircularBody(25);
 		var circle = new Circle(5);
 		circle.translate(new Vec2(0, 25));
@@ -216,12 +273,11 @@ class Balloon extends FlxNapeSprite
 		
 		body.shapes.at(0).material.density = .5;
 		body.shapes.at(0).material.dynamicFriction = 0;
-		
-
 	}
 	
 	public function onCollide() 
 	{
 		body.shapes.pop();
+		this.animation.frameIndex += 7;
 	}
 }

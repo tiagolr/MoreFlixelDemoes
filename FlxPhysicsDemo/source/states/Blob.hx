@@ -6,6 +6,7 @@ import flixel.addons.nape.FlxNapeSprite;
 import flixel.addons.nape.FlxNapeState;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.text.FlxText;
 import flixel.util.FlxAngle;
 import flixel.util.FlxMath;
 import flixel.util.FlxPoint;
@@ -29,6 +30,7 @@ import nape.shape.Circle;
 /**
  * ...
  * @author TiagoLr (~~~ ProG4mr ~~~)
+ * @link https://github.com/ProG4mr
  */
 class Blob extends FlxNapeState
 {
@@ -63,7 +65,7 @@ class Blob extends FlxNapeState
 		FlxNapeState.space.gravity.setxy(0, 500);
 
 		shooter = new Shooter();
-		shooter.disableShooting = true;
+		//shooter.disableShooting = true;
 		add(shooter);														 
 		
 		napeDebugEnabled = false;
@@ -78,6 +80,12 @@ class Blob extends FlxNapeState
 		}
 		
 		add(new FlxSprite(0, 0, "assets/BlobFground.png"));
+		
+		var txt:FlxText;
+		txt = new FlxText( -10, 5, 640, "      'R' - reset state, 'G' - toggle physics graphics");
+		add(txt);
+		txt = new FlxText( -10, 20, 640, "      'LEFT' & 'RIGHT' - switch demo");
+		add(txt);
 	}
 	
 	override public function destroy():Void 
@@ -102,6 +110,7 @@ class Blob extends FlxNapeState
 			circle.setBodyMaterial(1, 0.1, 2, 1, 0.001);
 			circle.makeGraphic(CIRCLE_RADIUS * 2, CIRCLE_RADIUS * 2, 0xFFFFFFFF); // Creates the dummie circle graphic used to add mouse events to this NapeSprite. 
 			circle.alpha = 0.01;
+			circle.body.isBullet = true;
 			listBlobCircles.push(circle);
 			add(circle);
 			

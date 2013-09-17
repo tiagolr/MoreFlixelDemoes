@@ -22,6 +22,7 @@ import openfl.Assets;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
+ * @link https://github.com/ProG4mr
  */
 
 class Explosions extends FlxNapeState
@@ -111,9 +112,9 @@ class Explosions extends FlxNapeState
 		explosionFire.loadGraphic("assets/ExplosionFire.png", true, false, 83, 83);
 		var frames:Array<Int> = new Array<Int>();
 		for (i in 0...43) frames.push(i);
-		explosionFire.addAnimation("normal", frames, 30, true);
+		//explosionFire.addAnimation("normal", frames, 30, true);
 		add(explosionFire);
-		explosionFire.play("normal");
+		//explosionFire.play("normal");
 		
 		explosion.explosionFire = explosionFire; // For deleting purposes.
 	}

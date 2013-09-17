@@ -8,6 +8,7 @@ import flixel.FlxGame;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
+ * @link https://github.com/ProG4mr
  */
 
 class Main extends Sprite 

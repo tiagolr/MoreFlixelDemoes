@@ -22,6 +22,7 @@ import openfl.display.FPS;
 
 /**
  * @author TiagoLr ( ~~~ProG4mr~~~ )
+ * @link https://github.com/ProG4mr
  */
 
 class Piramid extends FlxNapeState
@@ -52,10 +53,15 @@ class Piramid extends FlxNapeState
 		
 		
 		var txt:FlxText = new FlxText(FlxG.width - 100, 30, 100, "Bricks: " + bricks.length);
+		txt = new FlxText(-10, 5, 640, "      'R' - reset state, 'G' - toggle physics graphics");
+		add(txt);
+		txt = new FlxText( -10, 20, 640, "      'LEFT' & 'RIGHT' - switch demo");
+		add(txt);
+		txt = new FlxText( -10, 40, 640, "      Press 'Q' or 'W' to increase/decrease bricks");
+		txt.color = 0;
 		add(txt);
 		
 		
-		add(txt);
 		fps = new FPS(FlxG.width - 100, 5, 0xFFFFFF);
 		FlxG.stage.addChild(fps);
 	}
@@ -96,7 +102,7 @@ class Piramid extends FlxNapeState
 				brick.body.position.x = (FlxG.width / 2 - brickWidth / 2 * (Piramid.levels - i - 1)) + brickWidth * j; 
 				add(brick);
 				bricks.push(brick);
-				shooter.registerPhysSprite(brick);
+				//shooter.registerPhysSprite(brick);
 			}
 		}
 	}
