@@ -15,7 +15,7 @@ class FlixelTest extends FlxGame
 		var stageWidth:Int = Lib.current.stage.stageWidth;
 		var stageHeight:Int = Lib.current.stage.stageHeight;
 		
-		inline var treta = 0x00000;
+
 		var ratioX:Float = stageWidth / 640;
 		var ratioY:Float = stageHeight / 480;
 		var ratio:Float = Math.min(ratioX, ratioY);
@@ -34,7 +34,7 @@ class FlixelTest extends FlxGame
 		//_mouse.visible = true;
 	}
 
-	public function olhaAmerda(bosta:Int=0)
+	public function olhaAmerda()
 	{
 		
 	}
