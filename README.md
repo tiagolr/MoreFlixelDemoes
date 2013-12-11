@@ -10,3 +10,20 @@ Note: I also made a test while writting this demo, if application.nmmml :
 **<!--haxedef name="TRUE_ZOOM_OUT" /-->** is uncommented, the zoom out will not decrease the
 view size, that is done by increasing the rendering area of the camera, (which decreases performance), 
 this feature was left out of the demo because of issues related to the camera styles.
+
+<br/>
+**FlxCameraDemo:**
+<br/>
+
+<br/>
+**FlxPhysicsDemo
+<br/>
+
+
+<br/>
+FlxSpriteFilters
+<br/>
+
+<br/>
+FlxSpritesWithMouse
+<br/>
