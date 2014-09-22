@@ -1,29 +1,25 @@
 MoreFlixelDemoes
 ================
 
-**FlxCameraDemo:**<br/>
+This repo contains demos that showcase some of my contributions to the haxeflixel engine.
 
-Demonstration of the HaxeFlixel camera (FlxCamera) features, avalible here:<br/>
+**FlxCameraDemo**
+Shows camera lerp and lead new features.
 http://www.haxeflixel.com/demos/flxcamera
 
-Note: I also made a test while writting this demo, if application.nmmml : 
-**<!--haxedef name="TRUE_ZOOM_OUT" /-->** is uncommented, the zoom out will not decrease the
-view size, that is done by increasing the rendering area of the camera, (which decreases performance), 
-this feature was left out of the demo because of issues related to the camera styles.
+Try the demo [here](http://haxeflixel.com/demos/FlxCamera/).
 
-<br/>
-**FlxCameraDemo:**
-<br/>
+**FlxSpriteFilters**
+Shows bitmap filter support added to FlxSprites.
 
-<br/>
-**FlxPhysicsDemo
-<br/>
+Try the demo [here](http://haxeflixel.com/demos/FlxSpriteFilters/).
 
+**FlxSpritesWithMouse**
+Shows MouseEventManager witch adds mouse event support/functionality to FlxSprites. 
 
-<br/>
-FlxSpriteFilters
-<br/>
+Try the demo [here](http://haxeflixel.com/demos/MouseEventManager/).
 
-<br/>
-FlxSpritesWithMouse
-<br/>
+**FlxPhysicsDemo**
+Shows Nape physics integration with Flixel using two simple classes: FlxNapeState and FlxNapeSprite
+
+Try the demo [here](http://haxeflixel.com/demos/FlxNape/).
